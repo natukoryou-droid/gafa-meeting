@@ -1,0 +1,30 @@
+{
+  "updated_at": "2026/5/20 23:34",
+  "count": 24,
+  "meetings": [
+    { "day": "日", "no": 1, "name": "あいの風富山ステップG", "pref": "富山県", "time": "10:15-11:15", "mail": "gafa.toyama@gmail.com", "note": "" },
+    { "day": "月", "no": 1, "name": "旭川", "pref": "北海道", "time": "13:30-14:30", "mail": "gafa.asahikawa@gmail.com", "note": "" },
+    { "day": "火", "no": 1, "name": "山形べにばなステップ", "pref": "山形県", "time": "19:00-20:30", "mail": "gafa.benibana@gmail.com", "note": "" },
+    { "day": "火", "no": 2, "name": "ゆあみ", "pref": "岐阜県", "time": "19:00-20:00", "mail": "gafa.yuami@gmail.com", "note": "" },
+    { "day": "火", "no": 3, "name": "さぬきオリーブステップ", "pref": "香川県", "time": "19:00-20:15", "mail": "gafa.sanukiolive.step@gmail.com", "note": "" },
+    { "day": "火", "no": 4, "name": "アルペンやまなし", "pref": "山梨県", "time": "19:00-20:00", "mail": "gafa.alpen.yamanashi@gmail.com", "note": "" },
+    { "day": "火", "no": 5, "name": "松江だんだんステップ", "pref": "島根県", "time": "19:00-20:00", "mail": "gafamatsuedandan@gmail.com", "note": "" },
+    { "day": "火", "no": 6, "name": "弘前", "pref": "青森県", "time": "19:00-20:20", "mail": "gafa.hirosaki@gmail.com", "note": "" },
+    { "day": "火", "no": 7, "name": "宮津天橋立ステップ", "pref": "京都", "time": "19:00-20:00", "mail": "gafa.miyazu@gmail.com", "note": "" },
+    { "day": "火", "no": 8, "name": "大分かぼすステップ", "pref": "大分県", "time": "19:15-20:15", "mail": "gafa.kabosu@gmail.com", "note": "第2・4火のみ" },
+    { "day": "水", "no": 1, "name": "ステップ道後", "pref": "愛媛県", "time": "19:00-20:00", "mail": "gafa.stepdogo@gmail.com", "note": "" },
+    { "day": "水", "no": 2, "name": "さかいみなとステップ", "pref": "鳥取県", "time": "19:00-20:30", "mail": "gafa.sakaiminato@gmail.com", "note": "" },
+    { "day": "水", "no": 3, "name": "南国やまもも", "pref": "高知県", "time": "19:00-20:00", "mail": "gafa.nankokuyamamomo@gmail.com", "note": "" },
+    { "day": "水", "no": 4, "name": "鵜沼きらぼし", "pref": "岐阜県", "time": "19:10-20:10", "mail": "gafa.unumakiraboshi@gmail.com", "note": "" },
+    { "day": "木", "no": 1, "name": "青森", "pref": "青森県", "time": "18:30-19:30", "mail": "gafa.aomori@gmail.com", "note": "" },
+    { "day": "木", "no": 2, "name": "ひえづステップ", "pref": "鳥取県", "time": "19:00-20:00", "mail": "gafa.hiezu@gmail.com", "note": "" },
+    { "day": "木", "no": 3, "name": "とくしまステップ", "pref": "徳島県", "time": "19:00-20:15", "mail": "gafa.tokushima.step@gmail.com", "note": "" },
+    { "day": "木", "no": 4, "name": "中津", "pref": "大分県", "time": "19:10-20:20", "mail": "gafa.nakatsu@gmail.com", "note": "" },
+    { "day": "木", "no": 5, "name": "こみせ黒石ステップ", "pref": "青森県", "time": "19:30-20:30", "mail": "gafa.komisekuroishi@gmail.com", "note": "" },
+    { "day": "金", "no": 1, "name": "山口ふくふくステップ", "pref": "山口県", "time": "19:00-20:00", "mail": "gafa.yamaguchi.fukufuku@gmail.com", "note": "" },
+    { "day": "金", "no": 2, "name": "出雲", "pref": "島根県", "time": "19:00-20:00", "mail": "gafa.izumo@gmail.com", "note": "" },
+    { "day": "金", "no": 3, "name": "出島あかりステップ", "pref": "長崎県", "time": "19:15-20:15", "mail": "gafa.dejima.akari@gmail.com", "note": "" },
+    { "day": "土", "no": 1, "name": "あかべこステップ", "pref": "福島県", "time": "9:15-10:45", "mail": "gafa.akabeko@gmail.com", "note": "" },
+    { "day": "土", "no": 2, "name": "秋田", "pref": "秋田県", "time": "10:00-11:00", "mail": "gafa.akita@gmail.com", "note": "" }
+  ]
+}

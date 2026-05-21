@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GAFA ONLINE MEETING</title>
+<style>
+  :root {
+    --gafa-blue: #2E95B8;
+    --gafa-yellow: #F5C518;
+    --gafa-red: #E74C3C;
+    --gafa-green: #27AE60;
+
+    --sun: #C0392B;
+    --mon: #E8B100;
+    --tue: #E74C3C;
+    --wed: #3498DB;
+    --thu: #27AE60;
+    --fri: #E67E22;
+    --sat: #8E44AD;
+
+    --sun-bg: #FBEAE9;
+    --mon-bg: #FFF9E6;
+    --tue-bg: #FDECEA;
+    --wed-bg: #EAF4FB;
+    --thu-bg: #E8F5EC;
+    --fri-bg: #FCEEE0;
+    --sat-bg: #F0E8F5;
+
+    --border: #d0d7de;
+    --vline: #e1e6ea;
+    --text: #1f2328;
+    --muted: #6e7781;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    font-family: "Hiragino Maru Gothic ProN", "Hiragino Sans", "Yu Gothic UI", "Meiryo", sans-serif;
+    color: var(--text);
+    background: #f6f8fa;
+    font-size: 13px;
+    line-height: 1.4;
+    /* 色を必ず印刷するための重要設定 */
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
+  }
+
+  /* 全要素で色を維持 */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
+  }
+
+  .page {
+    width: 210mm;
+    min-height: 297mm;
+    margin: 10px auto;
+    padding: 7mm 7mm;
+    background: white;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  }
+
+  /* ヘッダー */
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding-bottom: 8px;
+    margin-bottom: 8px;
+    border-bottom: 1px solid #eee;
+  }
+  .title-group {
+    flex: 1;
+  }
+  .title-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .logo {
+    display: flex;
+    gap: 3px;
+    align-items: center;
+  }
+  .logo .diamond {
+    width: 9px; height: 9px;
+    transform: rotate(45deg);
+    border-radius: 1px;
+  }
+  .title-group h1 {
+    font-size: 16px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    color: var(--gafa-blue);
+    line-height: 1.1;
+  }
+  .title-group .sub {
+    font-size: 6.5px;
+    color: #b0b6bc;
+    margin-top: 3px;
+    letter-spacing: 0;
+  }
+  .header-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 4px;
+  }
+  .updated {
+    font-size: 9px;
+    color: var(--muted);
+  }
+  .update-btn {
+    background: var(--gafa-blue);
+    color: white;
+    border: none;
+    padding: 8px 22px;
+    border-radius: 22px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 3px 6px rgba(46,149,184,0.35);
+    white-space: nowrap;
+    transition: all 0.2s;
+  }
+  .update-btn:hover { background: #237aa0; transform: translateY(-1px); }
+
+  /* テーブル */
+  table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: 13px;
+    table-layout: fixed;
+  }
+  thead th {
+    background: var(--gafa-blue);
+    color: white;
+    padding: 5px 4px;
+    font-size: 11px;
+    font-weight: 700;
+    text-align: center;
+    border-right: 1px solid rgba(255,255,255,0.25);
+  }
+  thead th:first-child { border-radius: 8px 0 0 0; }
+  thead th:last-child { border-radius: 0 8px 0 0; border-right: none; }
+  thead th.col-day { width: 48px; }
+  thead th.col-name { width: 200px; text-align: left; padding-left: 8px;}
+  thead th.col-pref { width: 46px; }
+  thead th.col-time { width: 90px; padding-right: 10px; }
+  thead th.col-mail { text-align: left; padding-left: 14px; }
+  thead th.col-check {
+    width: 32px;
+    font-size: 14px;
+  }
+
+  tbody td {
+    border-bottom: 1px solid #eaeef2;
+    border-right: 1px solid var(--vline);
+    padding: 9px 5px;
+    vertical-align: middle;
+  }
+  tbody td:last-child { border-right: none; }
+
+  /* 曜日タグセル */
+  td.day-cell {
+    text-align: center;
+    vertical-align: middle;
+    padding: 6px 3px;
+  }
+  .day-wrap {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+  }
+  .day-tag {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 6px;
+    border-radius: 12px;
+    border: 2px solid;
+    font-weight: 800;
+    font-size: 18px;
+    line-height: 1;
+    background: white;
+    min-width: 38px;
+  }
+  .day-count-below {
+    font-size: 9px;
+    color: #555;
+    font-weight: 600;
+  }
+  .day-tag.sun { color: var(--sun); border-color: var(--sun); }
+  .day-tag.mon { color: var(--mon); border-color: var(--mon); }
+  .day-tag.tue { color: var(--tue); border-color: var(--tue); }
+  .day-tag.wed { color: var(--wed); border-color: var(--wed); }
+  .day-tag.thu { color: var(--thu); border-color: var(--thu); }
+  .day-tag.fri { color: var(--fri); border-color: var(--fri); }
+  .day-tag.sat { color: var(--sat); border-color: var(--sat); }
+
+  /* 曜日ごとの行背景 */
+  tbody tr.row-sun td:not(.day-cell) { background: var(--sun-bg); }
+  tbody tr.row-mon td:not(.day-cell) { background: var(--mon-bg); }
+  tbody tr.row-tue td:not(.day-cell) { background: var(--tue-bg); }
+  tbody tr.row-wed td:not(.day-cell) { background: var(--wed-bg); }
+  tbody tr.row-thu td:not(.day-cell) { background: var(--thu-bg); }
+  tbody tr.row-fri td:not(.day-cell) { background: var(--fri-bg); }
+  tbody tr.row-sat td:not(.day-cell) { background: var(--sat-bg); }
+
+  /* 交互で少し濃く */
+  tbody tr.alt.row-sun td:not(.day-cell) { background: #F6D5D3; }
+  tbody tr.alt.row-mon td:not(.day-cell) { background: #FFF4D0; }
+  tbody tr.alt.row-tue td:not(.day-cell) { background: #FBDCD8; }
+  tbody tr.alt.row-wed td:not(.day-cell) { background: #D9EAF6; }
+  tbody tr.alt.row-thu td:not(.day-cell) { background: #D4EBDA; }
+  tbody tr.alt.row-fri td:not(.day-cell) { background: #F8DEC4; }
+  tbody tr.alt.row-sat td:not(.day-cell) { background: #E2D2EC; }
+
+  /* 曜日セル背景 */
+  td.day-cell.cell-sun { background: var(--sun-bg); }
+  td.day-cell.cell-mon { background: var(--mon-bg); }
+  td.day-cell.cell-tue { background: var(--tue-bg); }
+  td.day-cell.cell-wed { background: var(--wed-bg); }
+  td.day-cell.cell-thu { background: var(--thu-bg); }
+  td.day-cell.cell-fri { background: var(--fri-bg); }
+  td.day-cell.cell-sat { background: var(--sat-bg); }
+
+  /* 曜日境界線 */
+  tbody tr.day-start td {
+    border-top: 2px solid var(--gafa-blue);
+  }
+
+  td.no {
+    text-align: center;
+    color: var(--muted);
+    font-size: 12px;
+  }
+  td.name {
+    font-weight: 700;
+    padding-left: 8px;
+    color: #2c3e50;
+    font-size: 13.5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  td.pref {
+    text-align: center;
+    font-size: 12.5px;
+    white-space: nowrap;
+  }
+  td.time {
+    text-align: center;
+    font-family: "SF Mono", Consolas, monospace;
+    font-size: 12.5px;
+    font-weight: 400;
+    white-space: nowrap;
+    padding-right: 10px;
+  }
+  td.mail {
+    padding-left: 14px;
+    font-size: 11px;
+    font-family: "SF Mono", Consolas, monospace;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  td.mail a {
+    color: #0969da;
+    text-decoration: none;
+  }
+  td.mail a:hover {
+    text-decoration: underline;
+    color: var(--gafa-blue);
+  }
+  td.check {
+    text-align: center;
+    padding: 2px;
+  }
+  td.check input[type="checkbox"] {
+    width: 18px; height: 18px;
+    cursor: pointer;
+    accent-color: var(--gafa-blue);
+  }
+
+  /* 注記欄 */
+  .note-cell {
+    font-size: 9px;
+    color: var(--muted);
+    line-height: 1.2;
+    font-weight: 400;
+    white-space: normal;
+  }
+
+  /* 最終行は角丸なし（全行統一） */
+
+  /* フッター */
+  .footer {
+    margin-top: 6px;
+    padding-top: 4px;
+    border-top: 1px solid #eee;
+    text-align: center;
+    font-size: 6.5px;
+    color: #b0b6bc;
+  }
+  .footer a {
+    color: #b0b6bc;
+    text-decoration: none;
+    font-weight: 500;
+  }
+  .footer a:hover { text-decoration: underline; color: var(--gafa-blue); }
+
+  /* 印刷時の設定（PDF保存にも適用される） */
+  @media print {
+    html, body {
+      background: white;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+      color-adjust: exact !important;
+    }
+    .page {
+      box-shadow: none;
+      margin: 0;
+      width: 100%;
+      min-height: auto;
+      padding: 5mm;
+    }
+    .update-btn { display: none; }
+
+    /* 印刷時に全ての背景色・枠色を強制表示 */
+    table, thead, tbody, tr, th, td, div, span, a {
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+      color-adjust: exact !important;
+    }
+    thead th { background: var(--gafa-blue) !important; color: white !important; }
+    .day-tag.sun { color: var(--sun) !important; border-color: var(--sun) !important; }
+    .day-tag.mon { color: var(--mon) !important; border-color: var(--mon) !important; }
+    .day-tag.tue { color: var(--tue) !important; border-color: var(--tue) !important; }
+    .day-tag.wed { color: var(--wed) !important; border-color: var(--wed) !important; }
+    .day-tag.thu { color: var(--thu) !important; border-color: var(--thu) !important; }
+    .day-tag.fri { color: var(--fri) !important; border-color: var(--fri) !important; }
+    .day-tag.sat { color: var(--sat) !important; border-color: var(--sat) !important; }
+
+    @page { size: A4; margin: 7mm; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <!-- ヘッダー -->
+  <div class="header">
+    <div class="title-group">
+      <div class="title-row">
+        <div class="logo">
+          <div class="diamond" style="background: var(--gafa-yellow);"></div>
+          <div class="diamond" style="background: var(--gafa-blue);"></div>
+          <div class="diamond" style="background: var(--gafa-red);"></div>
+          <div class="diamond" style="background: var(--gafa-green);"></div>
+        </div>
+        <h1>GAFA ONLINE MEETING</h1>
+        <div class="logo">
+          <div class="diamond" style="background: var(--gafa-yellow);"></div>
+          <div class="diamond" style="background: var(--gafa-blue);"></div>
+          <div class="diamond" style="background: var(--gafa-red);"></div>
+          <div class="diamond" style="background: var(--gafa-green);"></div>
+        </div>
+      </div>
+      <div class="sub">ギャンブル依存症家族の自助グループ GAFA オンライン開催ミーティング一覧 ｜ 全 <span id="group-count">24</span> グループ</div>
+    </div>
+    <div class="header-right">
+      <div class="updated">最終更新: <span id="last-updated">2026/5/20 23:34</span></div>
+      <button class="update-btn" onclick="updateData()">今すぐ更新</button>
+    </div>
+  </div>
+
+  <!-- テーブル -->
+  <table>
+    <thead>
+      <tr>
+        <th class="col-day">曜日</th>
+        <th class="col-name">グループ名</th>
+        <th class="col-pref">県</th>
+        <th class="col-time">時間</th>
+        <th class="col-mail">アドレス（お問い合わせ）</th>
+        <th class="col-check">✉</th>
+        <th class="col-check">💬</th>
+        <th class="col-check">👥</th>
+      </tr>
+    </thead>
+    <tbody id="meeting-tbody">
+      <!-- JSで生成 -->
+    </tbody>
+  </table>
+
+  <!-- フッター -->
+  <div class="footer">
+    <a href="https://gafa-official.org/" target="_blank">ギャンブル依存症家族の自助グループ GAFA 公式サイト</a>
+    ｜ チェック状態はブラウザに自動保存されます
+  </div>
+
+</div>
+
+<script>
+  const meetings = [
+    { day: "日", no: 1, name: "あいの風富山ステップG", pref: "富山県", time: "10:15-11:15", mail: "gafa.toyama@gmail.com", note: "" },
+    { day: "月", no: 1, name: "旭川", pref: "北海道", time: "13:30-14:30", mail: "gafa.asahikawa@gmail.com", note: "" },
+    { day: "火", no: 1, name: "山形べにばなステップ", pref: "山形県", time: "19:00-20:30", mail: "gafa.benibana@gmail.com", note: "" },
+    { day: "火", no: 2, name: "ゆあみ", pref: "岐阜県", time: "19:00-20:00", mail: "gafa.yuami@gmail.com", note: "" },
+    { day: "火", no: 3, name: "さぬきオリーブステップ", pref: "香川県", time: "19:00-20:15", mail: "gafa.sanukiolive.step@gmail.com", note: "" },
+    { day: "火", no: 4, name: "アルペンやまなし", pref: "山梨県", time: "19:00-20:00", mail: "gafa.alpen.yamanashi@gmail.com", note: "" },
+    { day: "火", no: 5, name: "松江だんだんステップ", pref: "島根県", time: "19:00-20:00", mail: "gafamatsuedandan@gmail.com", note: "" },
+    { day: "火", no: 6, name: "弘前", pref: "青森県", time: "19:00-20:20", mail: "gafa.hirosaki@gmail.com", note: "" },
+    { day: "火", no: 7, name: "宮津天橋立ステップ", pref: "京都", time: "19:00-20:00", mail: "gafa.miyazu@gmail.com", note: "" },
+    { day: "火", no: 8, name: "大分かぼすステップ", pref: "大分県", time: "19:15-20:15", mail: "gafa.kabosu@gmail.com", note: "第2・4火のみ" },
+    { day: "水", no: 1, name: "ステップ道後", pref: "愛媛県", time: "19:00-20:00", mail: "gafa.stepdogo@gmail.com", note: "" },
+    { day: "水", no: 2, name: "さかいみなとステップ", pref: "鳥取県", time: "19:00-20:30", mail: "gafa.sakaiminato@gmail.com", note: "" },
+    { day: "水", no: 3, name: "南国やまもも", pref: "高知県", time: "19:00-20:00", mail: "gafa.nankokuyamamomo@gmail.com", note: "" },
+    { day: "水", no: 4, name: "鵜沼きらぼし", pref: "岐阜県", time: "19:10-20:10", mail: "gafa.unumakiraboshi@gmail.com", note: "" },
+    { day: "木", no: 1, name: "青森", pref: "青森県", time: "18:30-19:30", mail: "gafa.aomori@gmail.com", note: "" },
+    { day: "木", no: 2, name: "ひえづステップ", pref: "鳥取県", time: "19:00-20:00", mail: "gafa.hiezu@gmail.com", note: "" },
+    { day: "木", no: 3, name: "とくしまステップ", pref: "徳島県", time: "19:00-20:15", mail: "gafa.tokushima.step@gmail.com", note: "" },
+    { day: "木", no: 4, name: "中津", pref: "大分県", time: "19:10-20:20", mail: "gafa.nakatsu@gmail.com", note: "" },
+    { day: "木", no: 5, name: "こみせ黒石ステップ", pref: "青森県", time: "19:30-20:30", mail: "gafa.komisekuroishi@gmail.com", note: "" },
+    { day: "金", no: 1, name: "山口ふくふくステップ", pref: "山口県", time: "19:00-20:00", mail: "gafa.yamaguchi.fukufuku@gmail.com", note: "" },
+    { day: "金", no: 2, name: "出雲", pref: "島根県", time: "19:00-20:00", mail: "gafa.izumo@gmail.com", note: "" },
+    { day: "金", no: 3, name: "出島あかりステップ", pref: "長崎県", time: "19:15-20:15", mail: "gafa.dejima.akari@gmail.com", note: "" },
+    { day: "土", no: 1, name: "あかべこステップ", pref: "福島県", time: "9:15-10:45", mail: "gafa.akabeko@gmail.com", note: "" },
+    { day: "土", no: 2, name: "秋田", pref: "秋田県", time: "10:00-11:00", mail: "gafa.akita@gmail.com", note: "" },
+  ];
+
+  const dayInfo = {
+    "日": { cls: "sun", label: "日" },
+    "月": { cls: "mon", label: "月" },
+    "火": { cls: "tue", label: "火" },
+    "水": { cls: "wed", label: "水" },
+    "木": { cls: "thu", label: "木" },
+    "金": { cls: "fri", label: "金" },
+    "土": { cls: "sat", label: "土" }
+  };
+
+  function shortPref(pref) {
+    if (pref.endsWith("県")) return pref.slice(0, -1);
+    return pref;
+  }
+
+  function gmailLink(mail) {
+    return `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(mail)}`;
+  }
+
+  function renderTable() {
+    const tbody = document.getElementById('meeting-tbody');
+    tbody.innerHTML = '';
+
+    const grouped = {};
+    meetings.forEach(m => {
+      if (!grouped[m.day]) grouped[m.day] = [];
+      grouped[m.day].push(m);
+    });
+
+    // 各曜日内を開始時刻の早い順にソート
+    Object.keys(grouped).forEach(day => {
+      grouped[day].sort((a, b) => {
+        const aStart = a.time.split('-')[0].replace(':', '');
+        const bStart = b.time.split('-')[0].replace(':', '');
+        return parseInt(aStart) - parseInt(bStart);
+      });
+    });
+
+    // 日曜日を一番上に！
+    const dayOrder = ["日", "月", "火", "水", "木", "金", "土"];
+
+    dayOrder.forEach((day, dayIdx) => {
+      const group = grouped[day];
+      if (!group) return;
+      const info = dayInfo[day];
+
+      group.forEach((m, idx) => {
+        const tr = document.createElement('tr');
+        tr.classList.add('row-' + info.cls);
+        if (idx % 2 === 1) tr.classList.add('alt');
+        if (idx === 0 && dayIdx > 0) tr.classList.add('day-start');
+
+        if (idx === 0) {
+          const dayCell = document.createElement('td');
+          dayCell.className = `day-cell cell-${info.cls}`;
+          dayCell.rowSpan = group.length;
+          dayCell.innerHTML = `<div class="day-wrap"><div class="day-tag ${info.cls}">${info.label}</div><div class="day-count-below">(${group.length})</div></div>`;
+          tr.appendChild(dayCell);
+        }
+
+        tr.innerHTML += `<td class="name" title="${m.name}">${m.name}${m.note ? `<div class="note-cell">※${m.note}</div>` : ''}</td>`;
+        tr.innerHTML += `<td class="pref">${shortPref(m.pref)}</td>`;
+        tr.innerHTML += `<td class="time">${m.time}</td>`;
+        tr.innerHTML += `<td class="mail"><a href="${gmailLink(m.mail)}" target="_blank" title="クリックでGmail送信: ${m.mail}">${m.mail}</a></td>`;
+
+        const key = `${day}-${m.no}`;
+        ['mail', 'line', 'join'].forEach(type => {
+          tr.innerHTML += `<td class="check"><input type="checkbox" data-key="${key}-${type}"></td>`;
+        });
+
+        tbody.appendChild(tr);
+      });
+    });
+
+    document.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+      const saved = localStorage.getItem('gafa-' + cb.dataset.key);
+      if (saved === '1') cb.checked = true;
+      cb.addEventListener('change', () => {
+        localStorage.setItem('gafa-' + cb.dataset.key, cb.checked ? '1' : '0');
+      });
+    });
+  }
+
+  function updateData() {
+    const ok = confirm("GAFA公式サイトのミーティング検索ページを開きます。\n最新情報を確認しますか？\n\n※チェックボックスの状態はそのまま保持されます。");
+    if (ok) {
+      window.open('https://gafa-official.org/meeting/', '_blank');
+    }
+  }
+
+  renderTable();
+</script>
+
+</body>
+</html>
