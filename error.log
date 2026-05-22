@@ -1,0 +1,9 @@
+[2026-05-23 07:05:09] スクレイピングエラー: ミーティング情報が見つかりませんでした。サイト構造が変更された可能性があります。
+Traceback (most recent call last):
+  File "/home/runner/work/gafa-meeting/gafa-meeting/scripts/scrape.py", line 183, in main
+    meetings = parse_meetings(html)
+               ^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/gafa-meeting/gafa-meeting/scripts/scrape.py", line 154, in parse_meetings
+    raise ValueError("ミーティング情報が見つかりませんでした。サイト構造が変更された可能性があります。")
+ValueError: ミーティング情報が見つかりませんでした。サイト構造が変更された可能性があります。
+
