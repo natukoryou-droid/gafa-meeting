@@ -22,24 +22,46 @@ from pathlib import Path
 import requests
 from bs4 import BeautifulSoup
 
-# 設定
-GAFA_URL = "https://gafa-official.org/meeting/"
+GAFA_URL = "https://gafa-official.org/search-results/?meeting-feature%5B%5D=online"
 OUTPUT_FILE = Path(__file__).parent.parent / "meetings.json"
 ERROR_LOG = Path(__file__).parent.parent / "error.log"
 REQUEST_TIMEOUT = 30
 USER_AGENT = "GAFA-Meeting-Updater/1.0 (personal use)"
 
-# 曜日マッピング
-DAY_MAP = {
-    "月曜日": "月", "火曜日": "火", "水曜日": "水",
-    "木曜日": "木", "金曜日": "金", "土曜日": "土", "日曜日": "日",
-    "月": "月", "火": "火", "水": "水",
-    "木": "木", "金": "金", "土": "土", "日": "日",
+WEEKDAY_CLASS_MAP = {
+    "sunday": "日", "monday": "月", "tuesday": "火", "wednesday": "水",
+    "thursday": "木", "friday": "金", "saturday": "土",
 }
+WEEKDAY_TEXT_MAP = {
+    "日曜日": "日", "月曜日": "月", "火曜日": "火", "水曜日": "水",
+    "木曜日": "木", "金曜日": "金", "土曜日": "土",
+}
+DAY_ORDER = ["日", "月", "火", "水", "木", "金", "土"]
+
+# meeting-area の li class → 既存JSONで使われている表記
+PREF_FROM_CLASS = {
+    "hokkaido": "北海道",
+    "aomori": "青森県", "akita": "秋田県", "iwate": "岩手県", "miyagi": "宮城県",
+    "yamagata": "山形県", "fukushima": "福島県",
+    "ibaraki": "茨城県", "tochigi": "栃木県", "gunma": "群馬県",
+    "saitama": "埼玉県", "chiba": "千葉県", "tokyo": "東京都", "kanagawa": "神奈川県",
+    "niigata": "新潟県", "toyama": "富山県", "ishikawa": "石川県", "fukui": "福井県",
+    "yamanashi": "山梨県", "nagano": "長野県",
+    "gifu": "岐阜県", "shizuoka": "静岡県", "aichi": "愛知県", "mie": "三重県",
+    "shiga": "滋賀県", "kyoto": "京都", "osaka": "大阪", "hyogo": "兵庫県",
+    "nara": "奈良県", "wakayama": "和歌山県",
+    "tottori": "鳥取県", "shimane": "島根県", "okayama": "岡山県",
+    "hiroshima": "広島県", "yamaguchi": "山口県",
+    "tokushima": "徳島県", "kagawa": "香川県", "ehime": "愛媛県", "kochi": "高知県",
+    "fukuoka": "福岡県", "saga": "佐賀県", "nagasaki": "長崎県", "kumamoto": "熊本県",
+    "oita": "大分県", "miyazaki": "宮崎県", "kagoshima": "鹿児島県", "okinawa": "沖縄県",
+}
+
+# 〜の表記ゆれ（U+301C / U+FF5E / ASCII ~ / 各種ハイフン）
+TILDE_CHARS = "〜～~ー―–—-"
 
 
 def log_error(message: str) -> None:
-    """エラーをタイムスタンプ付きでログ出力"""
     jst = timezone(timedelta(hours=9))
     ts = datetime.now(jst).strftime("%Y-%m-%d %H:%M:%S")
     line = f"[{ts}] {message}\n"
@@ -52,7 +74,6 @@ def log_error(message: str) -> None:
 
 
 def fetch_html(url: str) -> str:
-    """GAFA公式サイトのHTMLを取得"""
     headers = {"User-Agent": USER_AGENT}
     response = requests.get(url, headers=headers, timeout=REQUEST_TIMEOUT)
     response.raise_for_status()
@@ -60,118 +81,183 @@ def fetch_html(url: str) -> str:
     return response.text
 
 
-def parse_time(text: str) -> str:
-    """時間文字列を 'HH:MM-HH:MM' 形式に正規化"""
-    if not text:
-        return ""
-    # 全角を半角に
-    text = text.translate(str.maketrans("０１２３４５６７８９：", "0123456789:"))
-    # 〜やーをハイフンに統一
-    text = re.sub(r"[〜~ー―–—]", "-", text)
-    text = text.replace("@", "-")
-    # 時間パターンを抽出
-    match = re.search(r"(\d{1,2}:\d{2})\s*-\s*(\d{1,2}:\d{2})", text)
-    if match:
-        return f"{match.group(1)}-{match.group(2)}"
-    return text.strip()
+def to_halfwidth(text: str) -> str:
+    return text.translate(str.maketrans("０１２３４５６７８９：", "0123456789:"))
 
 
-def normalize_day(text: str) -> str:
-    """曜日表記を1文字に正規化"""
-    if not text:
-        return ""
-    text = text.strip()
-    for key, val in DAY_MAP.items():
-        if key in text:
-            return val
+def normalize_time(text: str) -> str:
+    """'10:15〜11:15' → '10:15-11:15'"""
+    text = to_halfwidth(text)
+    text = re.sub(f"[{TILDE_CHARS}]", "-", text)
+    m = re.search(r"(\d{1,2}:\d{2})\s*-\s*(\d{1,2}:\d{2})", text)
+    return f"{m.group(1)}-{m.group(2)}" if m else ""
+
+
+def extract_prefecture(card) -> str:
+    """ul.meeting-area の li class から都道府県を取得（最も具体的なものを採用）"""
+    for li in card.select("ul.meeting-area li"):
+        for cls in li.get("class", []):
+            if cls in PREF_FROM_CLASS:
+                return PREF_FROM_CLASS[cls]
     return ""
 
 
+def extract_email(card) -> str:
+    """カード内 <table> から「お問い合わせ」セルのメールを抽出（全角＠も対応）"""
+    def find_in(text: str) -> str:
+        text = text.replace("＠", "@")
+        m = re.search(r"[\w.\-]+@[\w.\-]+\.[\w.\-]+", text)
+        return m.group(0) if m else ""
+
+    for tr in card.select("figure.wp-block-table table tr"):
+        tds = tr.find_all("td")
+        if len(tds) >= 2 and "お問い合わせ" in tds[0].get_text():
+            mail = find_in(tds[1].get_text())
+            if mail:
+                return mail
+    return find_in(card.get_text())
+
+
+def parse_time_field(time_text: str) -> list[tuple[str, str, str]]:
+    """
+    p.time のテキストから (曜日, 時間, note) のリストを返す。
+
+    例:
+      "10:15〜11:15"
+        → [("", "10:15-11:15", "")]
+      "第1・3（日）10:15〜11:15　第2・4（火）19:15〜20:15"
+        → [("日", "10:15-11:15", "第1・3日のみ"),
+           ("火", "19:15-20:15", "第2・4火のみ")]
+    """
+    text = time_text.strip()
+    # 特殊スケジュール: 第N・M（曜）HH:MM〜HH:MM
+    pattern = re.compile(
+        r"第([0-9０-９]+(?:[・,]\s*[0-9０-９]+)*)\s*[（(]\s*([日月火水木金土])\s*[)）]\s*"
+        r"([0-9０-９]{1,2}[:：][0-9０-９]{2}\s*[" + TILDE_CHARS + r"]\s*[0-9０-９]{1,2}[:：][0-9０-９]{2})"
+    )
+    matches = list(pattern.finditer(text))
+    if matches:
+        results = []
+        for m in matches:
+            weeks = to_halfwidth(m.group(1)).replace("，", ",").replace("、", ",")
+            weeks = weeks.replace(",", "・")
+            day = m.group(2)
+            time_str = normalize_time(m.group(3))
+            note = f"第{weeks}{day}のみ"
+            if time_str:
+                results.append((day, time_str, note))
+        if results:
+            return results
+
+    time_str = normalize_time(text)
+    if time_str:
+        return [("", time_str, "")]
+    return []
+
+
 def parse_meetings(html: str) -> list[dict]:
-    """HTMLからミーティング情報を抽出"""
     soup = BeautifulSoup(html, "html.parser")
-    meetings = []
+    cards = soup.select("div.meeting-content")
+    if not cards:
+        # 一部レイアウトでは meeting-block を起点に探す
+        cards = [b.parent for b in soup.select("div.meeting-block")]
 
-    # GAFA公式サイトの構造に合わせて探索
-    # テーブル形式の場合
-    tables = soup.find_all("table")
-    for table in tables:
-        rows = table.find_all("tr")
-        for row in rows:
-            cells = row.find_all(["td", "th"])
-            if len(cells) < 4:
-                continue
-            texts = [c.get_text(strip=True) for c in cells]
-            # 曜日を含む行を抽出
-            day = ""
-            for t in texts:
-                d = normalize_day(t)
-                if d:
-                    day = d
-                    break
-            if not day:
-                continue
-            # メールアドレス検索
-            mail = ""
-            for c in cells:
-                m = re.search(r"[\w\.\-]+@[\w\.\-]+", c.get_text())
-                if m:
-                    mail = m.group(0)
-                    break
-            # 時間検索
-            time_str = ""
-            for t in texts:
-                if re.search(r"\d{1,2}:\d{2}", t):
-                    time_str = parse_time(t)
-                    break
-            # グループ名と県を推定
-            name = ""
-            pref = ""
-            for t in texts:
-                if normalize_day(t):
-                    continue
-                if re.search(r"\d{1,2}:\d{2}", t):
-                    continue
-                if "@" in t:
-                    continue
-                if re.search(r"[都道府県]$", t) or t in ["北海道", "京都", "大阪", "東京"]:
-                    pref = t
-                elif not name and t:
-                    name = t
+    meetings: list[dict] = []
 
-            if name and mail:
+    for card in cards:
+        title_el = card.select_one("h2.wp-block-post-title, .wp-block-post-title")
+        if not title_el:
+            continue
+        name = title_el.get_text(strip=True)
+        if not name:
+            continue
+
+        # 曜日（複数あり得る）
+        days: list[str] = []
+        for li in card.select("ul.meeting-week li"):
+            d = ""
+            for cls in li.get("class", []):
+                if cls in WEEKDAY_CLASS_MAP:
+                    d = WEEKDAY_CLASS_MAP[cls]
+                    break
+            if not d:
+                d = WEEKDAY_TEXT_MAP.get(li.get_text(strip=True), "")
+            if d and d not in days:
+                days.append(d)
+        if not days:
+            continue
+
+        # 時間（特殊スケジュール対応）
+        time_el = card.select_one("p.time")
+        time_text = time_el.get_text(" ", strip=True) if time_el else ""
+        time_entries = parse_time_field(time_text)
+        if not time_entries:
+            continue
+
+        pref = extract_prefecture(card)
+
+        mail = extract_email(card)
+        if not mail:
+            continue
+
+        # 曜日と時間のマッチング
+        # ケースA: 特殊スケジュール（day付きエントリ） → そのday/timeで登録
+        # ケースB: 単一時間（day=""） → meeting-week 各曜日に同じ時間で登録
+        specific = [e for e in time_entries if e[0]]
+        if specific:
+            for day, time_str, note in specific:
+                if day in days:
+                    meetings.append({
+                        "day": day, "name": name, "pref": pref,
+                        "time": time_str, "mail": mail, "note": note,
+                    })
+        else:
+            _, time_str, _ = time_entries[0]
+            for day in days:
                 meetings.append({
-                    "day": day,
-                    "name": name,
-                    "pref": pref,
-                    "time": time_str,
-                    "mail": mail,
-                    "note": "",
+                    "day": day, "name": name, "pref": pref,
+                    "time": time_str, "mail": mail, "note": "",
                 })
 
     if not meetings:
-        # テーブルが見つからない場合は別の手段を試す
         raise ValueError("ミーティング情報が見つかりませんでした。サイト構造が変更された可能性があります。")
 
-    # 各曜日内で開始時間順にソート
-    def time_key(m):
-        t = m.get("time", "")
-        match = re.match(r"(\d{1,2}):(\d{2})", t)
-        if match:
-            return int(match.group(1)) * 60 + int(match.group(2))
-        return 9999
-
-    day_order = ["日", "月", "火", "水", "木", "金", "土"]
-    meetings.sort(key=lambda m: (day_order.index(m["day"]) if m["day"] in day_order else 99, time_key(m)))
-
-    # No.を曜日内で振り直す
-    counts = {}
+    # 重複排除（同じ day+name+time）
+    seen = set()
+    deduped = []
     for m in meetings:
-        d = m["day"]
-        counts[d] = counts.get(d, 0) + 1
-        m["no"] = counts[d]
+        key = (m["day"], m["name"], m["time"])
+        if key in seen:
+            continue
+        seen.add(key)
+        deduped.append(m)
+    meetings = deduped
 
-    return meetings
+    # 曜日順→時刻順
+    def time_key(m):
+        mm = re.match(r"(\d{1,2}):(\d{2})", m.get("time", ""))
+        return int(mm.group(1)) * 60 + int(mm.group(2)) if mm else 9999
+
+    meetings.sort(key=lambda m: (
+        DAY_ORDER.index(m["day"]) if m["day"] in DAY_ORDER else 99,
+        time_key(m),
+    ))
+
+    # 曜日内 No. 採番
+    counts: dict[str, int] = {}
+    for m in meetings:
+        counts[m["day"]] = counts.get(m["day"], 0) + 1
+        m["no"] = counts[m["day"]]
+
+    # キー順を既存JSONに合わせる
+    ordered = []
+    for m in meetings:
+        ordered.append({
+            "day": m["day"], "no": m["no"], "name": m["name"],
+            "pref": m["pref"], "time": m["time"], "mail": m["mail"],
+            "note": m["note"],
+        })
+    return ordered
 
 
 def main() -> int:
@@ -187,24 +273,25 @@ def main() -> int:
             log_error("ミーティング数が0件です。既存データを維持します。")
             return 1
 
-        # 既存データの件数チェック（極端な減少は異常とみなす）
         if OUTPUT_FILE.exists():
             try:
                 with OUTPUT_FILE.open("r", encoding="utf-8") as f:
                     old = json.load(f)
-                if len(old) > 0 and len(meetings) < len(old) * 0.5:
+                old_count = old.get("count", len(old.get("meetings", []))) if isinstance(old, dict) else len(old)
+                if old_count > 0 and len(meetings) < old_count * 0.5:
                     log_error(
-                        f"取得件数が既存の半分未満です（{len(meetings)} < {len(old) * 0.5}）。"
+                        f"取得件数が既存の半分未満です（{len(meetings)} < {old_count * 0.5}）。"
                         "既存データを維持します。"
                     )
                     return 1
             except Exception:
                 pass
 
-        # 保存
         jst = timezone(timedelta(hours=9))
+        now = datetime.now(jst)
+        fmt = "%Y/%#m/%#d %H:%M" if sys.platform == "win32" else "%Y/%-m/%-d %H:%M"
         output = {
-            "updated_at": datetime.now(jst).strftime("%Y/%-m/%-d %H:%M") if sys.platform != "win32" else datetime.now(jst).strftime("%Y/%#m/%#d %H:%M"),
+            "updated_at": now.strftime(fmt),
             "count": len(meetings),
             "meetings": meetings,
         }
