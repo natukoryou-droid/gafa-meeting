@@ -1,0 +1,51 @@
+name: Update GAFA Meetings
+
+on:
+  schedule:
+    # 毎日 日本時間 朝6時 (UTC 21:00) に実行
+    - cron: "0 21 * * *"
+  workflow_dispatch:
+    # 手動実行も可能
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Scrape GAFA meetings
+        run: python scripts/scrape.py
+        continue-on-error: true
+
+      - name: Update HTML
+        run: python scripts/update_html.py
+
+      - name: Configure git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Commit and push if changed
+        run: |
+          git add gafa_meeting.html meetings.json error.log 2>/dev/null || true
+          if git diff --staged --quiet; then
+            echo "変更なし"
+          else
+            git commit -m "chore: auto-update meetings $(date +'%Y-%m-%d')"
+            git push
+          fi
