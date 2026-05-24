@@ -40,12 +40,18 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-      - name: Commit and push if changed
+      - name: Commit and push
         run: |
+          # meetings.json に差分があるかでコミットメッセージを分岐
+          if git diff --quiet -- meetings.json; then
+            MSG="chore: daily check $(date +'%Y-%m-%d')"
+          else
+            MSG="chore: auto-update meetings $(date +'%Y-%m-%d')"
+          fi
           git add gafa_meeting.html meetings.json error.log 2>/dev/null || true
           if git diff --staged --quiet; then
-            echo "変更なし"
+            echo "ステージング差分なし（last-checked 更新失敗の可能性）"
           else
-            git commit -m "chore: auto-update meetings $(date +'%Y-%m-%d')"
+            git commit -m "$MSG"
             git push
           fi

@@ -81,7 +81,7 @@ def build_density_style(count: int) -> str:
 """
 
 
-def update_html(html: str, meetings: list[dict], updated_at: str) -> str:
+def update_html(html: str, meetings: list[dict], updated_at: str, checked_at: str) -> str:
     """HTML文字列内のミーティングデータと更新日時を書き換え"""
     count = len(meetings)
 
@@ -91,10 +91,17 @@ def update_html(html: str, meetings: list[dict], updated_at: str) -> str:
     replacement = r"\g<1>\n" + new_array + r"\g<2>"
     html = re.sub(pattern, replacement, html, count=1)
 
-    # 2. 最終更新日時を置換
+    # 2. 最終更新日時を置換（データ変更時のみ実質変わる）
     html = re.sub(
         r'(<span id="last-updated">)[^<]*(</span>)',
         f"\\g<1>{updated_at}\\g<2>",
+        html,
+    )
+
+    # 2.5 自動チェック日時を置換（毎回必ず更新）
+    html = re.sub(
+        r'(<span id="last-checked">)[^<]*(</span>)',
+        f"\\g<1>{checked_at}\\g<2>",
         html,
     )
 
@@ -134,16 +141,16 @@ def main() -> int:
     with JSON_FILE.open("r", encoding="utf-8") as f:
         data = json.load(f)
 
+    jst = timezone(timedelta(hours=9))
+    now = datetime.now(jst)
+    checked_at = f"{now.year}/{now.month}/{now.day} {now.hour:02d}:{now.minute:02d}"
+
     if isinstance(data, list):
         meetings = data
-        jst = timezone(timedelta(hours=9))
-        updated_at = datetime.now(jst).strftime("%Y/%m/%d %H:%M")
+        updated_at = checked_at
     else:
         meetings = data.get("meetings", [])
-        updated_at = data.get("updated_at", "")
-        if not updated_at:
-            jst = timezone(timedelta(hours=9))
-            updated_at = datetime.now(jst).strftime("%Y/%m/%d %H:%M")
+        updated_at = data.get("updated_at", "") or checked_at
 
     if not meetings:
         print("エラー: meetings.json にデータがありません", file=sys.stderr)
@@ -154,13 +161,13 @@ def main() -> int:
         html = f.read()
 
     # 更新
-    new_html = update_html(html, meetings, updated_at)
+    new_html = update_html(html, meetings, updated_at, checked_at)
 
     # 書き込み
     with HTML_FILE.open("w", encoding="utf-8") as f:
         f.write(new_html)
 
-    print(f"HTML更新完了: {len(meetings)}件、最終更新 {updated_at}")
+    print(f"HTML更新完了: {len(meetings)}件、データ更新 {updated_at}、自動チェック {checked_at}")
     return 0
 
 
