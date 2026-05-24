@@ -69,8 +69,8 @@
     align-items: center;
     justify-content: space-between;
     gap: 12px;
-    padding-bottom: 8px;
-    margin-bottom: 8px;
+    padding-bottom: 0;
+    margin-bottom: 5px;
   }
   .title-group {
     flex: 1;
@@ -91,7 +91,7 @@
     border-radius: 1px;
   }
   .title-group h1 {
-    font-size: 19px;
+    font-size: 24px;
     font-weight: 800;
     letter-spacing: 0.5px;
     color: var(--gafa-blue);
@@ -105,13 +105,24 @@
   }
   .header-right {
     display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .updated-info {
+    display: flex;
     flex-direction: column;
     align-items: flex-end;
-    gap: 4px;
+    gap: 1px;
+    line-height: 1.3;
   }
   .updated {
     font-size: 9px;
     color: var(--muted);
+    white-space: nowrap;
+  }
+  .updated .label {
+    color: #b0b6bc;
+    margin-right: 2px;
   }
   .update-btn {
     background: var(--gafa-blue);
@@ -382,7 +393,10 @@
       <div class="sub">ギャンブル依存症家族の自助グループ GAFA オンライン開催ミーティング一覧 ｜ 全 <span id="group-count">24</span> グループ</div>
     </div>
     <div class="header-right">
-      <div class="updated">最終更新: <span id="last-updated">2026/5/20 23:34</span></div>
+      <div class="updated-info">
+        <div class="updated"><span class="label">自動チェック:</span> <span id="last-checked">2026/5/23 06:00</span></div>
+        <div class="updated"><span class="label">データ更新:</span> <span id="last-updated">2026/5/20 23:34</span></div>
+      </div>
       <button class="update-btn" onclick="updateData()">今すぐ更新</button>
     </div>
   </div>
