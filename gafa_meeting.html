@@ -63,7 +63,7 @@
     box-shadow: 0 2px 12px rgba(0,0,0,0.08);
   }
 
-  /* ヘッダー */
+  /* ヘッダー（下線なし） */
   .header {
     display: flex;
     align-items: center;
@@ -71,7 +71,6 @@
     gap: 12px;
     padding-bottom: 8px;
     margin-bottom: 8px;
-    border-bottom: 1px solid #eee;
   }
   .title-group {
     flex: 1;
@@ -92,7 +91,7 @@
     border-radius: 1px;
   }
   .title-group h1 {
-    font-size: 16px;
+    font-size: 19px;
     font-weight: 800;
     letter-spacing: 0.5px;
     color: var(--gafa-blue);
@@ -148,14 +147,22 @@
   }
   thead th:first-child { border-radius: 8px 0 0 0; }
   thead th:last-child { border-radius: 0 8px 0 0; border-right: none; }
-  thead th.col-day { width: 48px; }
-  thead th.col-name { width: 200px; text-align: left; padding-left: 8px;}
-  thead th.col-pref { width: 46px; }
-  thead th.col-time { width: 90px; padding-right: 10px; }
+  /* 列幅調整: グループ名15%狭く、その分を県と時間に振り分け */
+  thead th.col-day { width: 44px; }
+  thead th.col-name { width: 170px; text-align: left; padding-left: 8px;}
+  thead th.col-pref { width: 56px; }
+  thead th.col-time { width: 110px; padding-right: 8px; }
   thead th.col-mail { text-align: left; padding-left: 14px; }
   thead th.col-check {
     width: 32px;
     font-size: 14px;
+  }
+  /* 参加アイコン用のSVGスタイル */
+  thead th.col-check svg {
+    width: 14px;
+    height: 14px;
+    vertical-align: middle;
+    fill: white;
   }
 
   tbody td {
@@ -166,7 +173,7 @@
   }
   tbody td:last-child { border-right: none; }
 
-  /* 曜日タグセル */
+  /* 曜日タグセル（角丸囲い削除→色付き文字のみ） */
   td.day-cell {
     text-align: center;
     vertical-align: middle;
@@ -182,27 +189,24 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 6px 6px;
-    border-radius: 12px;
-    border: 2px solid;
     font-weight: 800;
     font-size: 18px;
     line-height: 1;
-    background: white;
-    min-width: 38px;
+    min-width: 28px;
+    /* 枠なし・背景なしのプレーンな表示 */
   }
   .day-count-below {
     font-size: 9px;
     color: #555;
     font-weight: 600;
   }
-  .day-tag.sun { color: var(--sun); border-color: var(--sun); }
-  .day-tag.mon { color: var(--mon); border-color: var(--mon); }
-  .day-tag.tue { color: var(--tue); border-color: var(--tue); }
-  .day-tag.wed { color: var(--wed); border-color: var(--wed); }
-  .day-tag.thu { color: var(--thu); border-color: var(--thu); }
-  .day-tag.fri { color: var(--fri); border-color: var(--fri); }
-  .day-tag.sat { color: var(--sat); border-color: var(--sat); }
+  .day-tag.sun { color: var(--sun); }
+  .day-tag.mon { color: var(--mon); }
+  .day-tag.tue { color: var(--tue); }
+  .day-tag.wed { color: var(--wed); }
+  .day-tag.thu { color: var(--thu); }
+  .day-tag.fri { color: var(--fri); }
+  .day-tag.sat { color: var(--sat); }
 
   /* 曜日ごとの行背景 */
   tbody tr.row-sun td:not(.day-cell) { background: var(--sun-bg); }
@@ -245,7 +249,7 @@
     font-weight: 700;
     padding-left: 8px;
     color: #2c3e50;
-    font-size: 13.5px;
+    font-size: 13px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -257,11 +261,14 @@
   }
   td.time {
     text-align: center;
-    font-family: "SF Mono", Consolas, monospace;
-    font-size: 12.5px;
-    font-weight: 400;
+    font-family: "SF Mono", Consolas, "Yu Gothic UI", monospace;
+    font-size: 13px;
+    font-weight: 500;
     white-space: nowrap;
-    padding-right: 10px;
+    padding-right: 8px;
+    /* 字間を詰めて見栄え良く */
+    letter-spacing: -0.8px;
+    font-feature-settings: "tnum" 1;
   }
   td.mail {
     padding-left: 14px;
@@ -298,13 +305,10 @@
     white-space: normal;
   }
 
-  /* 最終行は角丸なし（全行統一） */
-
-  /* フッター */
+  /* フッター（上線なし） */
   .footer {
     margin-top: 6px;
     padding-top: 4px;
-    border-top: 1px solid #eee;
     text-align: center;
     font-size: 6.5px;
     color: #b0b6bc;
@@ -317,15 +321,6 @@
   .footer a:hover { text-decoration: underline; color: var(--gafa-blue); }
 
   /* 印刷時の設定（PDF保存にも適用される） */
-
-
-  
-  /* 件数調整: 25-30件 */
-  tbody td { padding: 6px 5px; }
-  td.name { font-size: 12.5px; }
-  td.time { font-size: 11.5px; }
-  td.mail { font-size: 10px; }
-
   @media print {
     html, body {
       background: white;
@@ -338,7 +333,7 @@
       margin: 0;
       width: 100%;
       min-height: auto;
-      padding: 5mm;
+      padding: 2mm;
     }
     .update-btn { display: none; }
 
@@ -349,15 +344,16 @@
       color-adjust: exact !important;
     }
     thead th { background: var(--gafa-blue) !important; color: white !important; }
-    .day-tag.sun { color: var(--sun) !important; border-color: var(--sun) !important; }
-    .day-tag.mon { color: var(--mon) !important; border-color: var(--mon) !important; }
-    .day-tag.tue { color: var(--tue) !important; border-color: var(--tue) !important; }
-    .day-tag.wed { color: var(--wed) !important; border-color: var(--wed) !important; }
-    .day-tag.thu { color: var(--thu) !important; border-color: var(--thu) !important; }
-    .day-tag.fri { color: var(--fri) !important; border-color: var(--fri) !important; }
-    .day-tag.sat { color: var(--sat) !important; border-color: var(--sat) !important; }
+    .day-tag.sun { color: var(--sun) !important; }
+    .day-tag.mon { color: var(--mon) !important; }
+    .day-tag.tue { color: var(--tue) !important; }
+    .day-tag.wed { color: var(--wed) !important; }
+    .day-tag.thu { color: var(--thu) !important; }
+    .day-tag.fri { color: var(--fri) !important; }
+    .day-tag.sat { color: var(--sat) !important; }
 
-    @page { size: A4; margin: 7mm; }
+    /* 余白5mm */
+    @page { size: A4; margin: 5mm; }
   }
 </style>
 </head>
@@ -383,10 +379,10 @@
           <div class="diamond" style="background: var(--gafa-green);"></div>
         </div>
       </div>
-      <div class="sub">ギャンブル依存症家族の自助グループ GAFA オンライン開催ミーティング一覧 ｜ 全 <span id="group-count">25</span> グループ</div>
+      <div class="sub">ギャンブル依存症家族の自助グループ GAFA オンライン開催ミーティング一覧 ｜ 全 <span id="group-count">24</span> グループ</div>
     </div>
     <div class="header-right">
-      <div class="updated">最終更新: <span id="last-updated">2026/5/24 09:16</span></div>
+      <div class="updated">最終更新: <span id="last-updated">2026/5/20 23:34</span></div>
       <button class="update-btn" onclick="updateData()">今すぐ更新</button>
     </div>
   </div>
@@ -402,7 +398,7 @@
         <th class="col-mail">アドレス（お問い合わせ）</th>
         <th class="col-check">✉</th>
         <th class="col-check">💬</th>
-        <th class="col-check">👥</th>
+        <th class="col-check"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="7" r="4"/><path d="M12 13c-4.4 0-8 2.7-8 6v2h16v-2c0-3.3-3.6-6-8-6z"/></svg></th>
       </tr>
     </thead>
     <tbody id="meeting-tbody">
@@ -421,7 +417,6 @@
 <script>
   const meetings = [
     { day: "日", no: 1, name: "あいの風富山ステップG", pref: "富山県", time: "10:15-11:15", mail: "gafa.toyama@gmail.com", note: "" },
-    { day: "日", no: 2, name: "大分かぼすステップ", pref: "大分県", time: "10:15-11:15", mail: "gafa.kabosu@gmail.com", note: "第1・3日のみ" },
     { day: "月", no: 1, name: "旭川", pref: "北海道", time: "13:30-14:30", mail: "gafa.asahikawa@gmail.com", note: "" },
     { day: "火", no: 1, name: "山形べにばなステップ", pref: "山形県", time: "19:00-20:30", mail: "gafa.benibana@gmail.com", note: "" },
     { day: "火", no: 2, name: "ゆあみ", pref: "岐阜県", time: "19:00-20:00", mail: "gafa.yuami@gmail.com", note: "" },
@@ -512,7 +507,8 @@
         tr.innerHTML += `<td class="time">${m.time}</td>`;
         tr.innerHTML += `<td class="mail"><a href="${gmailLink(m.mail)}" target="_blank" title="クリックでGmail送信: ${m.mail}">${m.mail}</a></td>`;
 
-        const key = `${day}-${m.no}`;
+        // チェックボックスのキーをメールアドレスベースに変更（HTML更新でも残るように）
+        const key = `${m.mail}-${day}`;
         ['mail', 'line', 'join'].forEach(type => {
           tr.innerHTML += `<td class="check"><input type="checkbox" data-key="${key}-${type}"></td>`;
         });
