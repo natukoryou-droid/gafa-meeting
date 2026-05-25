@@ -93,12 +93,25 @@
     transform: rotate(45deg);
     border-radius: 1px;
   }
+  .title-link {
+    text-decoration: none;
+    color: inherit;
+    display: inline-block;
+    transition: opacity 0.2s;
+  }
+  .title-link:hover {
+    opacity: 0.7;
+  }
+  .title-link:hover h1 {
+    text-decoration: underline;
+  }
   .title-group h1 {
     font-size: 24px;
     font-weight: 800;
     letter-spacing: 0.5px;
     color: var(--gafa-blue);
     line-height: 1.1;
+    cursor: pointer;
   }
   .title-group .sub {
     font-size: 6.5px;
@@ -127,20 +140,6 @@
     color: #b0b6bc;
     margin-right: 2px;
   }
-  .update-btn {
-    background: var(--gafa-blue);
-    color: white;
-    border: none;
-    padding: 8px 22px;
-    border-radius: 22px;
-    font-size: 13px;
-    font-weight: 700;
-    cursor: pointer;
-    box-shadow: 0 3px 6px rgba(46,149,184,0.35);
-    white-space: nowrap;
-    transition: all 0.2s;
-  }
-  .update-btn:hover { background: #237aa0; transform: translateY(-1px); }
 
   /* テーブル */
   table {
@@ -335,13 +334,6 @@
   .footer a:hover { text-decoration: underline; color: var(--gafa-blue); }
 
   /* 印刷時の設定（PDF保存にも適用される） */
-  
-  /* 件数調整: 25-30件 */
-  tbody td { padding: 6px 5px; }
-  td.name { font-size: 12.5px; }
-  td.time { font-size: 11.5px; }
-  td.mail { font-size: 10px; }
-
   @media print {
     html, body {
       background: white;
@@ -356,7 +348,6 @@
       min-height: auto;
       padding: 2mm;
     }
-    .update-btn { display: none; }
 
     /* 印刷時に全ての背景色・枠色を強制表示 */
     table, thead, tbody, tr, th, td, div, span, a {
@@ -392,7 +383,7 @@
           <div class="diamond" style="background: var(--gafa-red);"></div>
           <div class="diamond" style="background: var(--gafa-green);"></div>
         </div>
-        <h1>GAFA ONLINE MEETING</h1>
+        <a href="https://gafa-official.org/" target="_blank" rel="noopener noreferrer" class="title-link" title="クリックでGAFA公式サイトへ"><h1>GAFA ONLINE MEETING</h1></a>
         <div class="logo">
           <div class="diamond" style="background: var(--gafa-yellow);"></div>
           <div class="diamond" style="background: var(--gafa-blue);"></div>
@@ -400,14 +391,13 @@
           <div class="diamond" style="background: var(--gafa-green);"></div>
         </div>
       </div>
-      <div class="sub">ギャンブル依存症家族の自助グループ GAFA オンライン開催ミーティング一覧 ｜ 全 <span id="group-count">25</span> グループ</div>
+      <div class="sub">ギャンブル依存症家族の自助グループ GAFA オンライン開催ミーティング一覧 ｜ 全 <span id="group-count">24</span> グループ</div>
     </div>
     <div class="header-right">
       <div class="updated-info">
-        <div class="updated"><span class="label">自動チェック:</span> <span id="last-checked">2026/5/25 20:59</span></div>
-        <div class="updated"><span class="label">データ更新:</span> <span id="last-updated">2026/5/25 20:59</span></div>
+        <div class="updated"><span class="label">自動チェック:</span> <span id="last-checked">2026/5/23 06:00</span></div>
+        <div class="updated"><span class="label">データ更新:</span> <span id="last-updated">2026/5/20 23:34</span></div>
       </div>
-      <button class="update-btn" onclick="updateData()">今すぐ更新</button>
     </div>
   </div>
 
@@ -432,7 +422,7 @@
 
   <!-- フッター -->
   <div class="footer">
-    <a href="https://gafa-official.org/" target="_blank">ギャンブル依存症家族の自助グループ GAFA 公式サイト</a>
+    <a href="https://gafa-official.org/" target="_blank" rel="noopener noreferrer">ギャンブル依存症家族の自助グループ GAFA 公式サイト</a>
     ｜ チェック状態はブラウザに自動保存されます
   </div>
 
@@ -441,7 +431,6 @@
 <script>
   const meetings = [
     { day: "日", no: 1, name: "あいの風富山ステップG", pref: "富山県", time: "10:15-11:15", mail: "gafa.toyama@gmail.com", note: "" },
-    { day: "日", no: 2, name: "大分かぼすステップ", pref: "大分県", time: "10:15-11:15", mail: "gafa.kabosu@gmail.com", note: "第1・3日のみ" },
     { day: "月", no: 1, name: "旭川", pref: "北海道", time: "13:30-14:30", mail: "gafa.asahikawa@gmail.com", note: "" },
     { day: "火", no: 1, name: "山形べにばなステップ", pref: "山形県", time: "19:00-20:30", mail: "gafa.benibana@gmail.com", note: "" },
     { day: "火", no: 2, name: "ゆあみ", pref: "岐阜県", time: "19:00-20:00", mail: "gafa.yuami@gmail.com", note: "" },
@@ -530,7 +519,7 @@
         tr.innerHTML += `<td class="name" title="${m.name}">${m.name}${m.note ? `<div class="note-cell">※${m.note}</div>` : ''}</td>`;
         tr.innerHTML += `<td class="pref">${shortPref(m.pref)}</td>`;
         tr.innerHTML += `<td class="time">${m.time}</td>`;
-        tr.innerHTML += `<td class="mail"><a href="${gmailLink(m.mail)}" target="_blank" title="クリックでGmail送信: ${m.mail}">${m.mail}</a></td>`;
+        tr.innerHTML += `<td class="mail"><a href="${gmailLink(m.mail)}" target="_blank" rel="noopener noreferrer" title="クリックでGmail送信: ${m.mail}">${m.mail}</a></td>`;
 
         // チェックボックスのキーをメールアドレスベースに変更（HTML更新でも残るように）
         const key = `${m.mail}-${day}`;
@@ -549,13 +538,6 @@
         localStorage.setItem('gafa-' + cb.dataset.key, cb.checked ? '1' : '0');
       });
     });
-  }
-
-  function updateData() {
-    const ok = confirm("GAFA公式サイトのミーティング検索ページを開きます。\n最新情報を確認しますか？\n\n※チェックボックスの状態はそのまま保持されます。");
-    if (ok) {
-      window.open('https://gafa-official.org/meeting/', '_blank');
-    }
   }
 
   renderTable();
