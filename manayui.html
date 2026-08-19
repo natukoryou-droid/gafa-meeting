@@ -19,6 +19,7 @@
   --brass-lt:#F1F5FC; /* 見出し・数字・Fin（白） */
   --cream:#E8EDF7;    /* 本文・ボタン地 */
   --white:#EDF4FB;    /* まなゆいの言葉（月明かりの白） */
+  --gold-hi:#FBEDCB;
   --p:0;
   --jp:"Klee One","Hiragino Maru Gothic ProN","Yu Gothic",sans-serif;
   --lat:"Cormorant Garamond","Times New Roman",serif;
@@ -53,20 +54,36 @@ body{
   -webkit-mask-image:linear-gradient(180deg,#000 0%,transparent 62%);
   filter:blur(6px)}
 #burst{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+#burst i.once{animation-iteration-count:1;animation-fill-mode:forwards}
+#burst i.lead{animation-iteration-count:1;animation-fill-mode:forwards}
 #burst i{position:absolute;bottom:-90px;display:block;--dx:0vw;
   animation:burstRise linear infinite;will-change:transform,opacity}
-#burst i b{display:block;width:100%;height:100%;border-radius:50%;
-  background:radial-gradient(circle at 34% 28%,
-    rgba(255,255,255,.60) 0%,rgba(206,228,248,.16) 55%,rgba(206,228,248,0) 76%);
-  box-shadow:inset 0 0 6px rgba(255,255,255,.22);
+#burst i b{display:block;width:100%;height:100%;
   animation:burstSway ease-in-out infinite alternate;will-change:transform}
+#burst i u{display:block;width:100%;height:100%;border-radius:50%;
+  background:radial-gradient(circle at 32% 26%,
+    rgba(255,255,255,.88) 0%,rgba(255,255,255,.24) 13%,
+    rgba(206,228,248,.07) 42%,rgba(206,228,248,.04) 70%,
+    rgba(255,255,255,.46) 93%,rgba(255,255,255,0) 100%);
+  box-shadow:inset 0 0 7px rgba(255,255,255,.30),
+             0 0 10px rgba(196,226,250,.34),
+             0 0 24px rgba(150,200,240,.16);
+  animation:burstSway2 ease-in-out infinite alternate;will-change:transform}
 @keyframes burstRise{
   0%{transform:translate3d(0,0,0);opacity:0}
   6%{opacity:.82}
+  8%{transform:translate3d(calc(var(--dx) * .20),-10vh,0)}
+  18%{transform:translate3d(calc(var(--dx) * .45),-23vh,0)}
+  32%{transform:translate3d(calc(var(--dx) * .68),-41vh,0)}
+  50%{transform:translate3d(calc(var(--dx) * .85),-64vh,0)}
+  72%{transform:translate3d(calc(var(--dx) * .95),-92vh,0)}
   100%{transform:translate3d(var(--dx),-128vh,0);opacity:.72}}
 @keyframes burstSway{
-  from{transform:translateX(-9px)}
-  to{transform:translateX(9px)}}
+  from{transform:translateX(-22px)}
+  to{transform:translateX(22px)}}
+@keyframes burstSway2{
+  from{transform:translate(-8px,3px)}
+  to{transform:translate(8px,-3px)}}
 #bubbles{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
 #bubbles i{position:absolute;bottom:-40px;display:block;
   animation:bRise linear infinite;will-change:transform}
@@ -156,17 +173,18 @@ body{
   border:1.5px solid rgba(185,200,228,.85)}
 
 /* ── セッション ── */
-#session{justify-content:space-between;position:relative}
-.ghost-num{position:absolute;right:2%;top:50%;
+#session{justify-content:space-between}
+.mantra-row{position:relative}
+.ghost-num{position:absolute;right:0;top:50%;
   animation:ghostIn .6s cubic-bezier(.2,.7,.3,1);
   font-family:"Shippori Mincho B1","Hiragino Mincho ProN","Yu Mincho",serif;font-weight:400;
-  font-size:13.5rem;line-height:1;letter-spacing:-.02em;
+  font-size:17rem;line-height:.74;letter-spacing:-.02em;
   color:var(--brass);opacity:.07;pointer-events:none;z-index:-1;
-  transform:translateY(-54%) skewX(-9deg);animation-fill-mode:both}
+  transform:translateY(-57%) skewX(-11deg);animation-fill-mode:both}
 .s-mid{animation:stepIn .42s cubic-bezier(.2,.7,.3,1)}
 @keyframes stepIn{from{opacity:0;transform:translateX(30px)}to{opacity:1;transform:none}}
-@keyframes ghostIn{from{opacity:0;transform:translateY(-54%) translateX(48px) skewX(-9deg)}
-  to{opacity:.07;transform:translateY(-54%) skewX(-9deg)}}
+@keyframes ghostIn{from{opacity:0;transform:translateY(-57%) translateX(48px) skewX(-11deg)}
+  to{opacity:.07;transform:translateY(-57%) skewX(-11deg)}}
 .s-top{display:flex;justify-content:space-between;align-items:flex-end}
 .step-num{font-family:var(--lat);font-weight:400;font-size:1.82rem;line-height:1;
   color:var(--brass);letter-spacing:0}
@@ -181,9 +199,17 @@ body{
 .lead{font-family:var(--jp);font-size:1.3rem;line-height:1.7;color:rgba(244,238,226,.82)}
 .mantra{font-family:var(--jp);font-weight:600;font-size:2.24rem;line-height:1.38;
   letter-spacing:.03em;color:var(--white);margin-top:26px;white-space:nowrap;
+  text-align:left;
   text-shadow:0 0 26px rgba(140,180,225,.30),0 0 6px rgba(200,220,245,.18);
-  transform:skewX(-5deg);transform-origin:0 100%;
   animation:breathe 7s ease-in-out infinite}
+.mantra span{display:block;transform:skewX(-11deg);transform-origin:0 100%;
+  opacity:.42;transition:opacity .6s ease,color .6s ease,
+    text-shadow .6s ease,letter-spacing .6s ease}
+.mantra span.hi{opacity:1;letter-spacing:.06em;color:var(--gold-hi);
+  text-shadow:0 0 3px rgba(255,247,225,.95),
+              0 0 12px rgba(246,214,144,.75),
+              0 0 30px rgba(232,186,96,.55),
+              0 0 60px rgba(224,170,70,.35)}
 @keyframes breathe{0%,100%{opacity:.9}50%{opacity:1}}
 
 /* ── 完了 ── */
@@ -194,21 +220,27 @@ body{
     rgba(160,188,224,.28) 78%,rgba(160,188,224,.09) 100%);
   -webkit-background-clip:text;background-clip:text;
   color:transparent;-webkit-text-fill-color:transparent;
-  filter:drop-shadow(0 2px 20px rgba(150,185,228,.22));
-  opacity:0;animation:fadeUp 1.4s ease .15s forwards}
+  filter:drop-shadow(0 2px 22px rgba(150,185,228,.24));
+  opacity:0;animation:finIn 2.9s cubic-bezier(.18,.6,.2,1) .2s forwards}
 .fin-rules{display:flex;align-items:center;gap:16px;justify-content:center;margin-top:30px;
-  opacity:0;animation:fadeUp .9s ease .5s forwards}
+  opacity:0;animation:fadeUp 1.3s ease 1.9s forwards}
 .fin-rules .rule-l{width:56px}
 .fin-rules .dot{width:4px;height:4px;border-radius:50%;background:var(--brass)}
 #done .stamp{font-family:var(--lat);font-size:1.02rem;letter-spacing:.28em;color:var(--brass);
-  margin-top:28px;opacity:0;animation:fadeUp .9s ease .8s forwards}
-#done .actions{margin-top:56px;opacity:0;animation:fadeUp .9s ease 1s forwards}
+  margin-top:28px;opacity:0;animation:fadeUp 1.3s ease 2.5s forwards}
+#done .actions{margin-top:56px;opacity:0;animation:fadeUp 1.3s ease 3.1s forwards}
 @keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@keyframes finIn{
+  0%{opacity:0;transform:translateY(30px) scale(.94);
+     filter:blur(12px) drop-shadow(0 2px 22px rgba(150,185,228,.24))}
+  55%{opacity:.7}
+  100%{opacity:1;transform:none;
+     filter:blur(0) drop-shadow(0 2px 22px rgba(150,185,228,.24))}}
 
 @media (prefers-reduced-motion:reduce){
   .mantra{animation:none}#glow,#rays{transition:none}
   #bubbles i{animation:none;opacity:.22}
-  .fin-big,.fin-rules,#done .stamp,#done .actions{animation:none;opacity:1}
+  .fin-big,.fin-rules,#done .stamp,#done .actions{animation:none;opacity:1;filter:none}
 }
 </style>
 </head>
@@ -250,7 +282,6 @@ body{
   </section>
 
   <section id="session" class="screen">
-    <div class="ghost-num" id="ghostNum">1</div>
     <div class="s-top">
       <div>
         <div class="step-num" id="stepNum">I</div>
@@ -263,7 +294,10 @@ body{
       <div class="utterance empty" id="utterance"></div>
       <div class="rule-l divider"></div>
       <div class="lead" id="lead">…と思った自分を、</div>
-      <div class="mantra" id="mantra">受けいれ<br>認め<br>ゆるし<br>愛しています</div>
+      <div class="mantra-row">
+        <div class="ghost-num" id="ghostNum">1</div>
+      <div class="mantra" id="mantra"><span>受けいれ</span><span>認め</span><span>ゆるし</span><span>愛しています</span></div>
+      </div>
     </div>
 
     <div>
@@ -304,7 +338,7 @@ body{
   var KEY='manayui:days', days=[];
   var KEY2='manayui:slots', slots={};
 
-  var MANTRA='受けいれ<br>認め<br>ゆるし<br>愛しています';
+  var MANTRA='<span>受けいれ</span><span>認め</span><span>ゆるし</span><span>愛しています</span>';
   var MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 
   var WORDS=[
@@ -368,7 +402,7 @@ body{
       $('utterance').style.display='none';
       $('lead').textContent='今日一日を、';
       $('mantra').innerHTML=MANTRA;
-      updateDots(3);$('ghostNum').textContent='';replay();
+      updateDots(3);$('ghostNum').textContent='4';highlight(3);replay();
       $('nextBtn').innerHTML='<span class="script">Fin</span>';
       $('blankBtn').style.visibility='hidden';
       return;
@@ -381,7 +415,7 @@ body{
     $('utterance').classList.add('empty');
     $('lead').textContent='…と思った自分を、';
     $('mantra').innerHTML=MANTRA;
-    updateDots(Math.min(idx,3));$('ghostNum').textContent=r.ar;replay();
+    updateDots(Math.min(idx,3));$('ghostNum').textContent=r.ar;highlight(Math.min(idx,3));replay();
     $('nextBtn').innerHTML='<span class="script">Next</span>';
     $('blankBtn').style.visibility='visible';
   }
@@ -447,6 +481,11 @@ body{
     });
   }
 
+  function highlight(n){
+    var sp=$('mantra').children;
+    for(var i=0;i<sp.length;i++) sp[i].className=(i===n?'hi':'');
+  }
+
   function replay(){
     var m=document.querySelector('.s-mid'), g=$('ghostNum');
     [m,g].forEach(function(el){
@@ -468,7 +507,7 @@ body{
     if(screens.session.classList.contains('on')){
       if(closing){finish();return}
       idx++; if(idx>=ROUNDS.length)closing=true;
-      paintStep();
+      paintStep(); bubblePuff(idx-1);
     }
   }
   function goBack(){
@@ -529,7 +568,7 @@ body{
       el.style.animationDelay=(-Math.random()*o.dur)+'s';
       el.style.setProperty('--dx',o.dx+'vw');
       inner.style.setProperty('--sw',o.sw+'px');
-      inner.style.animationDuration=(0.9+Math.random()*0.9)+'s';
+      inner.style.animationDuration=(2.2+Math.random()*2.6)+'s';
       inner.style.animationDelay=(-Math.random()*2)+'s';
       el.appendChild(inner); frag.appendChild(el);
     }
@@ -537,25 +576,61 @@ body{
     // 小
     for(var i=0;i<5;i++){
       add({x:10+i*20+Math.random()*8, sz:6+Math.random()*2,
-           dur:21+Math.random()*5, dx:-1.5+Math.random()*3, sw:4+Math.random()*3});
+           dur:21+Math.random()*5, dx:-1.5+Math.random()*3, sw:11+Math.random()*7});
     }
     // 中
     for(var j=0;j<4;j++){
       add({x:18+j*22+Math.random()*8, sz:13+Math.random()*4,
-           dur:30+Math.random()*6, dx:-1.5+Math.random()*3, sw:5+Math.random()*3});
+           dur:30+Math.random()*6, dx:-1.5+Math.random()*3, sw:14+Math.random()*8});
     }
     // 大
     for(var k=0;k<3;k++){
       add({x:8+k*35+Math.random()*10, sz:26+Math.random()*12,
-           dur:42+Math.random()*12, dx:-2+Math.random()*4, sw:7+Math.random()*4, big:1});
+           dur:42+Math.random()*12, dx:-2+Math.random()*4, sw:17+Math.random()*9, big:1});
     }
     box.appendChild(frag);
+  }
+
+  // 段ごとに湧き方を変える：奥まった一筋 → 中央でふくらむ → 大きく開く
+  var PUFF=[
+    {n:10, x:34, sp:4, s0:3, s1:8,  d0:7.0, d1:2.2, dx:14, lag:1.4},
+    {n:16, x:52, sp:6, s0:3, s1:13, d0:7.8, d1:2.4, dx:24, lag:2.0},
+    {n:24, x:64, sp:9, s0:4, s1:19, d0:8.6, d1:2.6, dx:36, lag:2.6}
+  ];
+
+  function bubblePuff(step){
+    var box=$('burst'); if(!box)return;
+    var c=PUFF[Math.max(0,Math.min(2,step))];
+    for(var i=0;i<c.n;i++){
+      var el=document.createElement('i'), inner=document.createElement('b');
+      el.className='once';
+      var u=Math.random()*2-1;
+      var sz=c.s0+Math.pow(Math.random(),2.2)*(c.s1-c.s0);
+      el.style.left=(c.x+u*c.sp)+'%';
+      el.style.width=sz+'px'; el.style.height=sz+'px';
+      el.style.setProperty('--dx',(u*c.dx)+'vw');
+      el.style.animationDuration=(c.d0+Math.random()*c.d1)+'s';
+      el.style.animationDelay=(Math.random()*c.lag)+'s';
+      inner.style.animationDuration=(3.2+Math.random()*2.2)+'s';
+      inner.style.animationDelay=(-Math.random()*4)+'s';
+      var fine=document.createElement('u');
+      fine.style.animationDuration=(1.2+Math.random()*0.9)+'s';
+      fine.style.animationDelay=(-Math.random()*2)+'s';
+      inner.appendChild(fine);
+      el.appendChild(inner); box.appendChild(el);
+    }
+    setTimeout(function(){
+      var old=box.querySelectorAll('i.once');
+      for(var k=0;k<old.length;k++) old[k].remove();
+    },14000);
   }
 
   function bubbleBurst(){
     var box=$('burst'); if(!box) return;
     box.innerHTML='';
-    for(var i=0;i<250;i++){
+    for(var i=0;i<310;i++){
+      // 最初の60個は先陣。速く駆け上がって画面を満たす
+      var lead=(i<38);
       var el=document.createElement('i'), inner=document.createElement('b');
       // 出発点は中央の細い一点、行き先だけを左右いっぱいに散らす
       var u=Math.random()*2-1;                 // -1（左端）〜 +1（右端）
@@ -563,15 +638,32 @@ body{
       el.style.left=(50+u*3)+'%';
       el.style.width=sz+'px'; el.style.height=sz+'px';
       // 昇るほど開いて、上端では画面幅いっぱいの逆三角形に
-      el.style.setProperty('--dx',(u*54+(Math.random()-0.5)*8)+'vw');
-      var dur=7.4+Math.random()*2.8;
+      el.style.setProperty('--dx',(u*64+(Math.random()-0.5)*10)+'vw');
+      var dur, del;
+      if(lead){
+        el.className='lead';
+        dur=8.2+Math.random()*2.0;
+        del=Math.random()*1.2;
+      }else{
+        dur=11.5+Math.random()*4.5;
+        // 出発時刻を早い側へ寄せる。序盤から密度が出て、かつ湧き口は絶えない
+        del=Math.pow(Math.random(),2.1)*dur;
+      }
       el.style.animationDuration=dur+'s';
-      el.style.animationDelay=(Math.random()*dur)+'s';
-      inner.style.animationDuration=(1.0+Math.random()*1.2)+'s';
-      inner.style.animationDelay=(-Math.random()*2)+'s';
+      el.style.animationDelay=del+'s';
+      inner.style.animationDuration=(3.1+Math.random()*2.4)+'s';
+      inner.style.animationDelay=(-Math.random()*4)+'s';
+      var fine=document.createElement('u');
+      fine.style.animationDuration=(1.15+Math.random()*0.8)+'s';
+      fine.style.animationDelay=(-Math.random()*2)+'s';
+      inner.appendChild(fine);
       el.appendChild(inner);
       box.appendChild(el);
     }
+    setTimeout(function(){
+      var old=box.querySelectorAll('i.lead');
+      for(var k=0;k<old.length;k++) old[k].remove();
+    },13500);
   }
 
   $('backBtn').addEventListener('click',function(){
