@@ -33,26 +33,24 @@ body{
   overflow:hidden;-webkit-font-smoothing:antialiased;
 }
 #sky{position:fixed;inset:0;z-index:0;
-  background:linear-gradient(180deg,#1B2A4E 0%,#132039 22%,#0C1628 48%,#070D1B 74%,#04070F 100%)}
+  background:linear-gradient(180deg,#22345E 0%,#182746 22%,#101A31 48%,#0A1122 74%,#060A16 100%)}
 /* ── 時間帯で深さが変わる ── */
 body.t-morning #sky{background:linear-gradient(180deg,
-  #2B416A 0%,#1B2C4C 20%,#101C33 46%,#080F1F 74%,#04070F 100%)}
+  #33497D 0%,#22345C 20%,#15203C 46%,#0C1226 74%,#070A18 100%)}
 body.t-morning #glow{background:radial-gradient(ellipse at 50% 0%,
   rgba(255,242,214,.52) 0%,rgba(226,206,204,.32) 22%,
   rgba(140,150,205,.15) 48%,rgba(140,150,205,0) 74%)}
 body.t-morning #rays{opacity:0}
 
 body.t-day #sky{background:linear-gradient(180deg,
-  #33619F 0%,#1F3862 18%,#111F3B 44%,#08101F 72%,#04070F 100%)}
+  #3A67AB 0%,#243F72 18%,#152444 44%,#0B1224 72%,#060A16 100%)}
 body.t-day #glow{background:radial-gradient(ellipse at 50% 0%,
   rgba(240,250,255,.62) 0%,rgba(168,208,248,.38) 24%,
   rgba(92,152,214,.18) 50%,rgba(92,152,214,0) 76%)}
-body.t-day #rays{opacity:calc(.16 + var(--p) * .44);
-  background:repeating-linear-gradient(96deg,
-    rgba(214,238,255,0) 0px,rgba(214,238,255,.62) 3px,rgba(214,238,255,0) 40px)}
+body.t-day #rays{opacity:0}
 
 body.t-night #sky{background:linear-gradient(180deg,
-  #0C1428 0%,#070D1C 20%,#040811 46%,#020409 74%,#010207 100%)}
+  #131C38 0%,#0C1226 20%,#070A18 46%,#04060F 74%,#02030A 100%)}
 body.t-night #glow{background:radial-gradient(ellipse at 50% 0%,
   rgba(196,212,248,.22) 0%,rgba(102,132,200,.12) 24%,
   rgba(56,84,150,.06) 48%,rgba(56,84,150,0) 74%)}
@@ -68,34 +66,34 @@ body.t-night #rays{opacity:0}
     rgba(255,255,255,.30) 0%,rgba(255,255,255,.12) 30%,rgba(255,255,255,0) 72%)}
 /* うねる光の網。二層が別々の速さで流れ続ける */
 #surface .wv{position:absolute;top:0;bottom:0;left:0;width:200%;will-change:transform}
-#surface .wv1{filter:blur(11px);
+#surface .wv1{filter:blur(18px);
   background-image:
-    radial-gradient(closest-side at 8% 34%, rgba(255,255,255,.52), transparent),
-    radial-gradient(closest-side at 27% 18%, rgba(255,255,255,.40), transparent),
-    radial-gradient(closest-side at 41% 46%, rgba(255,255,255,.46), transparent),
-    radial-gradient(closest-side at 62% 24%, rgba(255,255,255,.34), transparent),
-    radial-gradient(closest-side at 84% 40%, rgba(255,255,255,.44), transparent);
+    radial-gradient(closest-side at 8% 34%, rgba(255,250,232,.52), transparent),
+    radial-gradient(closest-side at 27% 18%, rgba(255,248,226,.40), transparent),
+    radial-gradient(closest-side at 41% 46%, rgba(255,251,236,.46), transparent),
+    radial-gradient(closest-side at 62% 24%, rgba(252,246,228,.34), transparent),
+    radial-gradient(closest-side at 84% 40%, rgba(255,250,232,.44), transparent);
   background-size:26% 46%,20% 30%,30% 52%,18% 34%,24% 44%;
   background-repeat:repeat-x;
   animation:wvA 26s linear infinite}
-#surface .wv2{filter:blur(16px);opacity:.75;
+#surface .wv2{filter:blur(26px);opacity:.75;
   background-image:
-    radial-gradient(closest-side at 16% 26%, rgba(255,255,255,.38), transparent),
-    radial-gradient(closest-side at 48% 40%, rgba(255,255,255,.32), transparent),
-    radial-gradient(closest-side at 74% 20%, rgba(255,255,255,.36), transparent);
+    radial-gradient(closest-side at 16% 26%, rgba(250,244,226,.38), transparent),
+    radial-gradient(closest-side at 48% 40%, rgba(248,242,224,.32), transparent),
+    radial-gradient(closest-side at 74% 20%, rgba(250,244,226,.36), transparent);
   background-size:34% 40%,28% 56%,38% 34%;
   background-repeat:repeat-x;
   animation:wvB 41s linear infinite}
 /* さらに細かい、横に散る光の粒 */
-#surface .wv3{filter:blur(2.4px);opacity:.55;
+#surface .wv3{filter:blur(3.4px);opacity:.5;
   background-image:
-    radial-gradient(closest-side at 6% 14%, rgba(255,255,255,.62), transparent),
-    radial-gradient(closest-side at 23% 9%, rgba(255,255,255,.48), transparent),
-    radial-gradient(closest-side at 39% 21%, rgba(255,255,255,.55), transparent),
-    radial-gradient(closest-side at 57% 12%, rgba(255,255,255,.42), transparent),
-    radial-gradient(closest-side at 71% 26%, rgba(255,255,255,.50), transparent),
-    radial-gradient(closest-side at 88% 17%, rgba(255,255,255,.45), transparent);
-  background-size:8% 2.2%,5% 1.6%,11% 2.8%,6% 1.9%,9% 2.4%,7% 2.1%;
+    radial-gradient(closest-side at 6% 14%, rgba(255,247,222,.68), transparent),
+    radial-gradient(closest-side at 23% 9%, rgba(255,244,214,.52), transparent),
+    radial-gradient(closest-side at 39% 21%, rgba(255,249,230,.60), transparent),
+    radial-gradient(closest-side at 57% 12%, rgba(252,242,214,.46), transparent),
+    radial-gradient(closest-side at 71% 26%, rgba(255,247,222,.55), transparent),
+    radial-gradient(closest-side at 88% 17%, rgba(253,245,220,.50), transparent);
+  background-size:6% 1.6%,4% 1.2%,8% 2.0%,5% 1.4%,7% 1.8%,5% 1.5%;
   background-repeat:repeat;
   animation:wvC 33s linear infinite}
 @keyframes wvC{from{transform:translateX(-50%)}to{transform:translateX(0)}}
@@ -112,11 +110,11 @@ body.t-night #rays{opacity:0}
 @keyframes twinkle{
   from{opacity:.22;transform:translateY(3px) scale(.88)}
   to{opacity:.95;transform:translateY(-5px) scale(1.10)}}
-body.t-day #surface{opacity:0}
-body.t-day #sparkle{opacity:0}
+body.t-day #surface{opacity:.68}
+body.t-day #sparkle{opacity:.5}
 body.t-morning #surface{opacity:.62}
 body.t-morning #surface .lit{background:linear-gradient(180deg,
-  rgba(255,246,226,.32) 0%,rgba(255,240,214,.13) 30%,rgba(255,240,214,0) 72%)}
+  rgba(255,247,228,.34) 0%,rgba(255,242,216,.14) 30%,rgba(255,242,216,0) 72%)}
 body.t-morning #sparkle{opacity:.5}
 body.t-morning #sparkle b{background:radial-gradient(circle,
   rgba(255,247,228,.95) 0%,rgba(255,238,208,.32) 44%,rgba(255,238,208,0) 72%)}
@@ -127,19 +125,29 @@ body.t-night #surface,body.t-night #sparkle{opacity:0}
 #glow{
   position:fixed;left:50%;top:-26vh;z-index:0;width:160vw;height:84vh;
   background:radial-gradient(ellipse at 50% 0%,
-    rgba(226,236,255,.46) 0%,rgba(150,180,235,.28) 24%,
-    rgba(90,120,190,.13) 48%,rgba(90,120,190,0) 74%);
+    rgba(232,238,255,.46) 0%,rgba(158,172,238,.28) 24%,
+    rgba(104,112,196,.13) 48%,rgba(104,112,196,0) 74%);
   opacity:calc(.12 + var(--p) * .88);
   transform:translateX(-50%) scale(calc(.45 + var(--p) * .75));
   transform-origin:50% 0%;transition:opacity 1s linear,transform 1s linear;
   pointer-events:none;filter:blur(3px)}
-#rays{position:fixed;inset:0;z-index:0;pointer-events:none;
+#rays{position:fixed;left:0;right:0;top:0;height:40vh;z-index:0;
+  pointer-events:none;overflow:hidden;
   opacity:calc(.05 + var(--p) * .18);transition:opacity 1s linear;
-  background:repeating-linear-gradient(96deg,
-    rgba(214,228,255,0) 0px,rgba(214,228,255,.45) 2px,rgba(214,228,255,0) 46px);
-  mask-image:linear-gradient(180deg,#000 0%,transparent 62%);
-  -webkit-mask-image:linear-gradient(180deg,#000 0%,transparent 62%);
-  filter:blur(6px)}
+  clip-path:polygon(-6% 0%,106% 0%,70% 100%,30% 100%);
+  mask-image:linear-gradient(180deg,#000 0%,rgba(0,0,0,.72) 46%,transparent 100%);
+  -webkit-mask-image:linear-gradient(180deg,#000 0%,rgba(0,0,0,.72) 46%,transparent 100%)}
+#rays i{position:absolute;top:-10%;left:-25%;width:150%;height:120%;display:block;
+  background:repeating-linear-gradient(118deg,
+    rgba(222,234,255,0) 0px,rgba(222,234,255,.34) 14px,rgba(222,234,255,0) 52px);
+  filter:blur(15px);
+  animation:rayDrift 34s linear infinite}
+#rays i.r2{background:repeating-linear-gradient(112deg,
+    rgba(230,240,255,0) 0px,rgba(230,240,255,.24) 10px,rgba(230,240,255,0) 74px);
+  filter:blur(24px);animation-duration:53s;animation-direction:reverse}
+@keyframes rayDrift{
+  from{transform:translateX(0)}
+  to{transform:translateX(-16%)}}
 #burst{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
 #burst i.once{animation-iteration-count:1;animation-fill-mode:forwards}
 #burst i.lead{animation-iteration-count:1;animation-fill-mode:forwards}
@@ -327,7 +335,7 @@ body.t-night #surface,body.t-night #sparkle{opacity:0}
 @media (prefers-reduced-motion:reduce){
   .mantra{animation:none}#glow,#rays{transition:none}
   #bubbles i{animation:none;opacity:.22}
-  #sparkle b,#surface{animation:none}
+  #sparkle b,#surface .wv,#rays i{animation:none}
   .fin-big,.fin-rules,#done .stamp,#done .actions{animation:none;opacity:1;filter:none}
 }
 </style>
@@ -335,7 +343,7 @@ body.t-night #surface,body.t-night #sparkle{opacity:0}
 <body>
 <div id="sky"></div>
 <div id="glow"></div>
-<div id="rays"></div>
+<div id="rays" aria-hidden="true"><i class="r1"></i><i class="r2"></i></div>
 <div id="surface" aria-hidden="true"><div class="lit"></div><div class="wv wv1"></div><div class="wv wv2"></div><div class="wv wv3"></div></div>
 <div id="sparkle" aria-hidden="true"></div>
 <div id="burst" aria-hidden="true"></div>
