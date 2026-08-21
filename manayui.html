@@ -58,16 +58,49 @@ body.t-night #glow{background:radial-gradient(ellipse at 50% 0%,
   rgba(56,84,150,.06) 48%,rgba(56,84,150,0) 74%)}
 body.t-night #rays{opacity:0}
 
-#surface{position:fixed;left:0;right:0;top:0;height:36vh;z-index:0;pointer-events:none;
-  opacity:0;transition:opacity 1.2s ease;filter:blur(7px);
+#surface{position:fixed;left:0;right:0;top:0;height:40vh;z-index:0;pointer-events:none;
+  overflow:hidden;opacity:0;transition:opacity 1.2s ease;
+  mask-image:linear-gradient(180deg,#000 0%,rgba(0,0,0,.85) 42%,transparent 100%);
+  -webkit-mask-image:linear-gradient(180deg,#000 0%,rgba(0,0,0,.85) 42%,transparent 100%)}
+/* 水面そのもののあかるみ */
+#surface .lit{position:absolute;inset:0;
   background:linear-gradient(180deg,
-    rgba(255,255,255,.26) 0%,rgba(255,255,255,.09) 22%,
-    rgba(255,255,255,.20) 38%,rgba(255,255,255,.05) 56%,
-    rgba(255,255,255,0) 78%);
-  animation:surfaceDrift 13s ease-in-out infinite alternate}
-@keyframes surfaceDrift{
-  from{transform:translateY(-6px) scaleY(1)}
-  to{transform:translateY(6px) scaleY(1.05)}}
+    rgba(255,255,255,.30) 0%,rgba(255,255,255,.12) 30%,rgba(255,255,255,0) 72%)}
+/* うねる光の網。二層が別々の速さで流れ続ける */
+#surface .wv{position:absolute;top:0;bottom:0;left:0;width:200%;will-change:transform}
+#surface .wv1{filter:blur(11px);
+  background-image:
+    radial-gradient(closest-side at 8% 34%, rgba(255,255,255,.52), transparent),
+    radial-gradient(closest-side at 27% 18%, rgba(255,255,255,.40), transparent),
+    radial-gradient(closest-side at 41% 46%, rgba(255,255,255,.46), transparent),
+    radial-gradient(closest-side at 62% 24%, rgba(255,255,255,.34), transparent),
+    radial-gradient(closest-side at 84% 40%, rgba(255,255,255,.44), transparent);
+  background-size:26% 46%,20% 30%,30% 52%,18% 34%,24% 44%;
+  background-repeat:repeat-x;
+  animation:wvA 26s linear infinite}
+#surface .wv2{filter:blur(16px);opacity:.75;
+  background-image:
+    radial-gradient(closest-side at 16% 26%, rgba(255,255,255,.38), transparent),
+    radial-gradient(closest-side at 48% 40%, rgba(255,255,255,.32), transparent),
+    radial-gradient(closest-side at 74% 20%, rgba(255,255,255,.36), transparent);
+  background-size:34% 40%,28% 56%,38% 34%;
+  background-repeat:repeat-x;
+  animation:wvB 41s linear infinite}
+/* さらに細かい、横に散る光の粒 */
+#surface .wv3{filter:blur(2.4px);opacity:.55;
+  background-image:
+    radial-gradient(closest-side at 6% 14%, rgba(255,255,255,.62), transparent),
+    radial-gradient(closest-side at 23% 9%, rgba(255,255,255,.48), transparent),
+    radial-gradient(closest-side at 39% 21%, rgba(255,255,255,.55), transparent),
+    radial-gradient(closest-side at 57% 12%, rgba(255,255,255,.42), transparent),
+    radial-gradient(closest-side at 71% 26%, rgba(255,255,255,.50), transparent),
+    radial-gradient(closest-side at 88% 17%, rgba(255,255,255,.45), transparent);
+  background-size:8% 2.2%,5% 1.6%,11% 2.8%,6% 1.9%,9% 2.4%,7% 2.1%;
+  background-repeat:repeat;
+  animation:wvC 33s linear infinite}
+@keyframes wvC{from{transform:translateX(-50%)}to{transform:translateX(0)}}
+@keyframes wvA{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@keyframes wvB{from{transform:translateX(-50%)}to{transform:translateX(0)}}
 #sparkle{position:fixed;left:0;right:0;top:0;height:38vh;z-index:0;
   pointer-events:none;overflow:hidden;opacity:0;transition:opacity 1.2s ease;
   mask-image:linear-gradient(180deg,#000 0%,rgba(0,0,0,.55) 52%,transparent 100%);
@@ -81,12 +114,10 @@ body.t-night #rays{opacity:0}
   to{opacity:.95;transform:translateY(-5px) scale(1.10)}}
 body.t-day #surface{opacity:0}
 body.t-day #sparkle{opacity:0}
-body.t-morning #surface{opacity:.56;
-  background:linear-gradient(180deg,
-    rgba(255,244,222,.26) 0%,rgba(255,240,214,.09) 22%,
-    rgba(255,238,212,.20) 38%,rgba(250,232,214,.05) 56%,
-    rgba(250,232,214,0) 78%)}
-body.t-morning #sparkle{opacity:.56}
+body.t-morning #surface{opacity:.62}
+body.t-morning #surface .lit{background:linear-gradient(180deg,
+  rgba(255,246,226,.32) 0%,rgba(255,240,214,.13) 30%,rgba(255,240,214,0) 72%)}
+body.t-morning #sparkle{opacity:.5}
 body.t-morning #sparkle b{background:radial-gradient(circle,
   rgba(255,247,228,.95) 0%,rgba(255,238,208,.32) 44%,rgba(255,238,208,0) 72%)}
 body.t-night #surface,body.t-night #sparkle{opacity:0}
@@ -305,7 +336,7 @@ body.t-night #surface,body.t-night #sparkle{opacity:0}
 <div id="sky"></div>
 <div id="glow"></div>
 <div id="rays"></div>
-<div id="surface"></div>
+<div id="surface" aria-hidden="true"><div class="lit"></div><div class="wv wv1"></div><div class="wv wv2"></div><div class="wv wv3"></div></div>
 <div id="sparkle" aria-hidden="true"></div>
 <div id="burst" aria-hidden="true"></div>
 <div id="bubbles" aria-hidden="true"></div>
@@ -623,13 +654,13 @@ body.t-night #surface,body.t-night #sparkle{opacity:0}
   function makeSparkle(){
     var box=$('sparkle'); if(!box)return;
     var frag=document.createDocumentFragment();
-    for(var i=0;i<34;i++){
+    for(var i=0;i<22;i++){
       var el=document.createElement('b');
       var sz=4+Math.pow(Math.random(),1.9)*22;
       el.style.width=sz+'px'; el.style.height=sz+'px';
       el.style.left=(Math.random()*100)+'%';
       el.style.top=(Math.random()*94)+'%';
-      el.style.filter='blur('+(0.6+sz*0.09).toFixed(1)+'px)';
+      el.style.filter='blur('+(1.4+sz*0.16).toFixed(1)+'px)';
       el.style.animationDuration=(2.6+Math.random()*3.8)+'s';
       el.style.animationDelay=(-Math.random()*5)+'s';
       frag.appendChild(el);
