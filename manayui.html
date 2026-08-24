@@ -10,7 +10,7 @@
 <title>まなゆい｜深海</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Klee+One:wght@400;600&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400;1,500&family=Parisienne&family=Shippori+Mincho+B1:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Klee+One:wght@400;600&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400;1,500&family=Parisienne&family=Shippori+Mincho+B1:wght@400;500&family=Zen+Kurenaido&display=swap" rel="stylesheet">
 <style>
 :root{
   --ink:#050A16;
@@ -63,36 +63,36 @@ body.t-night #rays{opacity:0}
 /* 水面そのもののあかるみ */
 #surface .lit{position:absolute;inset:0;
   background:linear-gradient(180deg,
-    rgba(255,255,255,.30) 0%,rgba(255,255,255,.12) 30%,rgba(255,255,255,0) 72%)}
+    rgba(176,204,255,.22) 0%,rgba(150,180,240,.08) 30%,rgba(150,180,240,0) 72%)}
 /* うねる光の網。二層が別々の速さで流れ続ける */
 #surface .wv{position:absolute;top:0;bottom:0;left:0;width:200%;will-change:transform}
 #surface .wv1{filter:blur(18px);
   background-image:
-    radial-gradient(closest-side at 8% 34%, rgba(255,250,232,.52), transparent),
-    radial-gradient(closest-side at 27% 18%, rgba(255,248,226,.40), transparent),
-    radial-gradient(closest-side at 41% 46%, rgba(255,251,236,.46), transparent),
-    radial-gradient(closest-side at 62% 24%, rgba(252,246,228,.34), transparent),
-    radial-gradient(closest-side at 84% 40%, rgba(255,250,232,.44), transparent);
+    radial-gradient(closest-side at 8% 34%, rgba(196,220,255,.42), transparent),
+    radial-gradient(closest-side at 27% 18%, rgba(180,208,252,.32), transparent),
+    radial-gradient(closest-side at 41% 46%, rgba(200,224,255,.38), transparent),
+    radial-gradient(closest-side at 62% 24%, rgba(176,204,248,.28), transparent),
+    radial-gradient(closest-side at 84% 40%, rgba(196,220,255,.36), transparent);
   background-size:26% 46%,20% 30%,30% 52%,18% 34%,24% 44%;
   background-repeat:repeat-x;
   animation:wvA 26s linear infinite}
 #surface .wv2{filter:blur(26px);opacity:.75;
   background-image:
-    radial-gradient(closest-side at 16% 26%, rgba(250,244,226,.38), transparent),
-    radial-gradient(closest-side at 48% 40%, rgba(248,242,224,.32), transparent),
-    radial-gradient(closest-side at 74% 20%, rgba(250,244,226,.36), transparent);
+    radial-gradient(closest-side at 16% 26%, rgba(170,198,246,.30), transparent),
+    radial-gradient(closest-side at 48% 40%, rgba(164,192,242,.26), transparent),
+    radial-gradient(closest-side at 74% 20%, rgba(170,198,246,.28), transparent);
   background-size:34% 40%,28% 56%,38% 34%;
   background-repeat:repeat-x;
   animation:wvB 41s linear infinite}
 /* さらに細かい、横に散る光の粒 */
 #surface .wv3{filter:blur(3.4px);opacity:.5;
   background-image:
-    radial-gradient(closest-side at 6% 14%, rgba(255,247,222,.68), transparent),
-    radial-gradient(closest-side at 23% 9%, rgba(255,244,214,.52), transparent),
-    radial-gradient(closest-side at 39% 21%, rgba(255,249,230,.60), transparent),
-    radial-gradient(closest-side at 57% 12%, rgba(252,242,214,.46), transparent),
-    radial-gradient(closest-side at 71% 26%, rgba(255,247,222,.55), transparent),
-    radial-gradient(closest-side at 88% 17%, rgba(253,245,220,.50), transparent);
+    radial-gradient(closest-side at 6% 14%, rgba(206,228,255,.54), transparent),
+    radial-gradient(closest-side at 23% 9%, rgba(190,216,252,.42), transparent),
+    radial-gradient(closest-side at 39% 21%, rgba(202,226,255,.48), transparent),
+    radial-gradient(closest-side at 57% 12%, rgba(184,212,250,.38), transparent),
+    radial-gradient(closest-side at 71% 26%, rgba(196,222,254,.44), transparent),
+    radial-gradient(closest-side at 88% 17%, rgba(188,214,250,.40), transparent);
   background-size:6% 1.6%,4% 1.2%,8% 2.0%,5% 1.4%,7% 1.8%,5% 1.5%;
   background-repeat:repeat;
   animation:wvC 33s linear infinite}
@@ -105,7 +105,7 @@ body.t-night #rays{opacity:0}
   -webkit-mask-image:linear-gradient(180deg,#000 0%,rgba(0,0,0,.55) 52%,transparent 100%)}
 #sparkle b{position:absolute;border-radius:50%;display:block;
   background:radial-gradient(circle,
-    rgba(255,255,255,.95) 0%,rgba(255,255,255,.34) 44%,rgba(255,255,255,0) 72%);
+    rgba(226,240,255,.82) 0%,rgba(186,214,255,.28) 44%,rgba(186,214,255,0) 72%);
   animation:twinkle ease-in-out infinite alternate;will-change:opacity,transform}
 @keyframes twinkle{
   from{opacity:.22;transform:translateY(3px) scale(.88)}
@@ -119,6 +119,18 @@ body.t-morning #sparkle{opacity:.5}
 body.t-morning #sparkle b{background:radial-gradient(circle,
   rgba(255,247,228,.95) 0%,rgba(255,238,208,.32) 44%,rgba(255,238,208,0) 72%)}
 body.t-night #surface,body.t-night #sparkle{opacity:0}
+#blessBg{position:fixed;top:50%;left:89%;z-index:0;
+  width:76vh;text-align:center;white-space:nowrap;pointer-events:none;
+  font-family:"Shippori Mincho B1","Hiragino Mincho ProN","Yu Mincho",serif;
+  font-size:26vh;line-height:1;letter-spacing:.01em;color:var(--brass-lt);
+  opacity:0;transform:translate(-50%,-50%) rotate(90deg) skewX(-11deg);
+  transition:opacity 1s ease}
+body.blessing #blessBg{opacity:.08}
+/* 5枚目は案内文と罫線を出さない。空いた分だけ言葉を上へ */
+body.blessing .guide,body.blessing .divider{display:none}
+body.blessing .s-mid{justify-content:flex-start;padding-top:calc(8vh + 3.4rem)}
+body.blessing .utterance{min-height:1.4em}
+body.blessing .mantra{margin-top:18px}
 #grain{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.4;
   background-image:radial-gradient(rgba(233,239,250,.05) .5px,transparent .5px);
   background-size:4px 4px}
@@ -300,6 +312,25 @@ body.t-night #surface,body.t-night #sparkle{opacity:0}
 .mantra span{display:block;transform:skewX(-11deg);transform-origin:0 100%;
   opacity:.42;transition:opacity .6s ease,color .6s ease,
     text-shadow .6s ease,letter-spacing .6s ease}
+body.blessing .guide,body.blessing .lead,
+body.blessing .utterance,body.blessing .mantra{
+  font-family:"Zen Kurenaido","Klee One","Hiragino Maru Gothic ProN",sans-serif;
+  font-weight:400}
+body.blessing .mantra{font-weight:400;font-size:2.18rem;
+  letter-spacing:.14em;line-height:1.5}
+/* 上は淡く光り、下へゆくほど背景に溶ける */
+body.blessing .mantra span.hi{
+  color:transparent;-webkit-text-fill-color:transparent;
+  -webkit-text-stroke:0;text-shadow:none;
+  background:linear-gradient(180deg,
+    rgba(240,248,255,.98) 0%,rgba(196,218,250,.78) 46%,
+    rgba(126,158,214,.48) 80%,rgba(84,112,170,.30) 100%);
+  -webkit-background-clip:text;background-clip:text;
+  filter:drop-shadow(0 0 20px rgba(150,190,250,.22))}
+body.blessing .mantra span{transform:skewX(-8deg)}
+body.blessing .lead{font-size:1.38rem;letter-spacing:.08em;
+  transform:skewX(-7deg);transform-origin:0 100%}
+body.blessing .guide{font-size:1.14rem;letter-spacing:.06em}
 .mantra span.hi{opacity:1;letter-spacing:.06em;color:var(--gold-hi);
   text-shadow:0 0 3px rgba(255,247,225,.95),
               0 0 12px rgba(246,214,144,.75),
@@ -321,9 +352,14 @@ body.t-night #surface,body.t-night #sparkle{opacity:0}
   opacity:0;animation:fadeUp 1.3s ease 1.9s forwards}
 .fin-rules .rule-l{width:56px}
 .fin-rules .dot{width:4px;height:4px;border-radius:50%;background:var(--brass)}
+#done .blessline{margin-top:30px;opacity:0;animation:fadeUp 1.3s ease 2.2s forwards}
+#done .blessline .en{font-family:var(--script);font-weight:400;
+  font-size:2.25rem;line-height:1.25;letter-spacing:.02em;
+  color:rgba(248,236,208,.88);
+  text-shadow:0 0 14px rgba(236,206,150,.26),0 0 34px rgba(220,180,110,.14)}
 #done .stamp{font-family:var(--lat);font-size:1.02rem;letter-spacing:.28em;color:var(--brass);
-  margin-top:28px;opacity:0;animation:fadeUp 1.3s ease 2.5s forwards}
-#done .actions{margin-top:56px;opacity:0;animation:fadeUp 1.3s ease 3.1s forwards}
+  margin-top:28px;opacity:0;animation:fadeUp 1.3s ease 3.0s forwards}
+#done .actions{margin-top:48px;opacity:0;animation:fadeUp 1.3s ease 3.6s forwards}
 @keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 @keyframes finIn{
   0%{opacity:0;transform:translateY(30px) scale(.94);
@@ -336,7 +372,7 @@ body.t-night #surface,body.t-night #sparkle{opacity:0}
   .mantra{animation:none}#glow,#rays{transition:none}
   #bubbles i{animation:none;opacity:.22}
   #sparkle b,#surface .wv,#rays i{animation:none}
-  .fin-big,.fin-rules,#done .stamp,#done .actions{animation:none;opacity:1;filter:none}
+  .fin-big,.fin-rules,#done .stamp,#done .actions,#done .blessline{animation:none;opacity:1;filter:none}
 }
 </style>
 </head>
@@ -349,6 +385,7 @@ body.t-night #surface,body.t-night #sparkle{opacity:0}
 <div id="burst" aria-hidden="true"></div>
 <div id="bubbles" aria-hidden="true"></div>
 <div id="grain"></div>
+<div id="blessBg" aria-hidden="true">Bless</div>
 
 <div id="app">
 
@@ -375,7 +412,7 @@ body.t-night #surface,body.t-night #sparkle{opacity:0}
       <div class="grid" id="calGrid"></div>
     </div>
 
-    <div class="dots"><span></span><span></span><span></span><span></span></div>
+    <div class="dots"><span></span><span></span><span></span><span></span><span></span></div>
     <div class="btn-wrap"><button class="btn" id="startBtn"><span class="script">Start</span></button></div>
   </section>
 
@@ -384,7 +421,6 @@ body.t-night #surface,body.t-night #sparkle{opacity:0}
       <div>
         <div class="step-num" id="stepNum">I</div>
       </div>
-      <span class="clock" id="clock">3:00</span>
     </div>
 
     <div class="s-mid">
@@ -399,7 +435,7 @@ body.t-night #surface,body.t-night #sparkle{opacity:0}
     </div>
 
     <div>
-      <div class="dots"><span></span><span></span><span></span><span></span></div>
+      <div class="dots"><span></span><span></span><span></span><span></span><span></span></div>
       <div class="btn-wrap"><button class="btn" id="nextBtn"><span class="script">Next</span></button></div>
       <button class="link" id="blankBtn"><span>何も浮かばない時</span></button>
     </div>
@@ -409,6 +445,9 @@ body.t-night #surface,body.t-night #sparkle{opacity:0}
     <div class="fin-big">Fin</div>
     <div class="fin-rules">
       <span class="rule-l"></span><span class="dot"></span><span class="rule-l"></span>
+    </div>
+    <div class="blessline" id="blessLine" style="display:none">
+      <div class="en">Bless you</div>
     </div>
     <div class="stamp" id="doneStamp"></div>
     <div class="actions"><button class="close" id="backBtn" aria-label="閉じる">✕</button></div>
@@ -454,11 +493,14 @@ body.t-night #surface,body.t-night #sparkle{opacity:0}
     {num:'II', ar:'2',guide:'その後に湧いてきた思いを、次に'},
     {num:'III',ar:'3',guide:'もう一つ、出てきた事を'}
   ];
+  var BLESS_MANTRA='<span>愛しています</span>';
+  var blessOn=false;   // その回に祝福を出すか
+  var blessed=false;   // 祝福の段に入ったか
   var BLANK='今日は 何も浮かばんな';
 
   var $=function(id){return document.getElementById(id)};
   var screens={standby:$('standby'),session:$('session'),done:$('done')};
-  var timerId=null,startAt=0,idx=0,closing=false,wakeLock=null,DURATION=180;
+  var idx=0,closing=false,wakeLock=null;
 
   function show(n){for(var k in screens)screens[k].classList.toggle('on',k===n)}
   function setProgress(p){document.documentElement.style.setProperty('--p',Math.max(0,Math.min(1,p)).toFixed(3))}
@@ -494,18 +536,38 @@ body.t-night #surface,body.t-night #sparkle{opacity:0}
   }
 
   function paintStep(){
+    if(blessed){
+      document.body.classList.add('blessing');
+      $('stepNum').textContent='';
+      $('ghostNum').textContent='';
+      $('ghostNum').className='ghost-num';
+      $('guide').textContent='浮かんだ人の名前を、そのまま';
+      $('utterance').style.display='';
+      $('utterance').textContent='';
+      $('utterance').classList.add('empty');
+      $('lead').textContent='…さんを、';
+      $('mantra').innerHTML=BLESS_MANTRA;
+      $('nextBtn').innerHTML='<span class="script">Next</span>';
+      $('blankBtn').style.visibility='visible';
+      updateDots(4);highlight(0);replay();lightByStep();
+      return;
+    }
     if(closing){
+      document.body.classList.remove('blessing');
+      $('ghostNum').className='ghost-num';
       $('stepNum').textContent='IV';
       $('guide').textContent='締めの言葉を、ゆっくり';
       $('utterance').style.display='none';
       $('lead').textContent='今日一日を、';
       $('mantra').innerHTML=MANTRA;
-      updateDots(3);$('ghostNum').textContent='4';highlight(3);replay();
-      $('nextBtn').innerHTML='<span class="script">Fin</span>';
+      updateDots(3);$('ghostNum').textContent='4';highlight(3);replay();lightByStep();
+      $('nextBtn').innerHTML='<span class="script">Next</span>';
       $('blankBtn').style.visibility='hidden';
       return;
     }
+    document.body.classList.remove('blessing');
     var r=ROUNDS[Math.min(idx,ROUNDS.length-1)];
+    $('ghostNum').className='ghost-num';
     $('stepNum').textContent=r.num;
     $('guide').textContent=r.guide;
     $('utterance').style.display='';
@@ -513,33 +575,48 @@ body.t-night #surface,body.t-night #sparkle{opacity:0}
     $('utterance').classList.add('empty');
     $('lead').textContent='…と思った自分を、';
     $('mantra').innerHTML=MANTRA;
-    updateDots(Math.min(idx,3));$('ghostNum').textContent=r.ar;highlight(Math.min(idx,3));replay();
+    updateDots(Math.min(idx,3));$('ghostNum').textContent=r.ar;highlight(Math.min(idx,3));replay();lightByStep();
     $('nextBtn').innerHTML='<span class="script">Next</span>';
     $('blankBtn').style.visibility='visible';
-  }
-
-  function tick(){
-    var el=(Date.now()-startAt)/1000, left=Math.max(0,DURATION-el);
-    $('clock').textContent=Math.floor(left/60)+':'+('0'+Math.floor(left%60)).slice(-2);
-    setProgress(el/DURATION);
-    if(left<=0){
-      clearInterval(timerId);timerId=null;chime();
-      if(!closing){closing=true;paintStep()}
-    }
   }
 
   function chime(){
     try{
       var C=window.AudioContext||window.webkitAudioContext; if(!C)return;
-      var ctx=new C();
-      [880,1320].forEach(function(f,n){
-        var o=ctx.createOscillator(),g=ctx.createGain();
-        o.type='sine';o.frequency.value=f;
-        g.gain.setValueAtTime(0.0001,ctx.currentTime);
-        g.gain.exponentialRampToValueAtTime(n?0.05:0.11,ctx.currentTime+0.02);
-        g.gain.exponentialRampToValueAtTime(0.0001,ctx.currentTime+3.4);
-        o.connect(g);g.connect(ctx.destination);o.start();o.stop(ctx.currentTime+3.6);
-      });
+      var ctx=new C(), t0=ctx.currentTime;
+      var out=ctx.createGain(); out.gain.value=0.9; out.connect(ctx.destination);
+
+      // ティンシャ：非整数倍の倍音を重ね、高い成分ほど早く消す
+      // 2枚の音が僅かにずれて鳴り、ゆっくりしたうねりが生まれる
+      function strike(base,delay,level){
+        var parts=[[1,1.0,11.0],[2.76,0.42,6.5],[5.40,0.26,4.0],
+                   [8.93,0.14,2.4],[13.3,0.07,1.5]];
+        parts.forEach(function(pp){
+          var o=ctx.createOscillator(), g=ctx.createGain();
+          o.type='sine';
+          o.frequency.value=base*pp[0];
+          var a=t0+delay;
+          g.gain.setValueAtTime(0.0001,a);
+          g.gain.exponentialRampToValueAtTime(level*pp[1]*0.11,a+0.006);
+          g.gain.exponentialRampToValueAtTime(0.0001,a+pp[2]);
+          o.connect(g); g.connect(out);
+          o.start(a); o.stop(a+pp[2]+0.1);
+        });
+      }
+      strike(2093,0,1.0);   // 一枚だけ。うねりを作らず、澄んだまま伸ばす
+
+      // 打った瞬間の金属音
+      var len=ctx.sampleRate*0.09, buf=ctx.createBuffer(1,len,ctx.sampleRate);
+      var d=buf.getChannelData(0);
+      for(var i=0;i<len;i++) d[i]=(Math.random()*2-1)*Math.pow(1-i/len,7);
+      var src=ctx.createBufferSource(); src.buffer=buf;
+      var bp=ctx.createBiquadFilter(); bp.type='bandpass';
+      bp.frequency.value=5200; bp.Q.value=1.4;
+      var ng=ctx.createGain(); ng.gain.value=0.05;
+      src.connect(bp); bp.connect(ng); ng.connect(out);
+      src.start(t0);
+
+      setTimeout(function(){ try{ctx.close()}catch(e){} },13000);
     }catch(e){}
   }
 
@@ -551,19 +628,18 @@ body.t-night #surface,body.t-night #sparkle{opacity:0}
   }
 
   function startSession(){
-    idx=0;closing=false;startAt=Date.now();
-    setProgress(0);paintStep();show('session');lockScreen(true);
-    if(timerId)clearInterval(timerId);
-    timerId=setInterval(tick,250);tick();
+    idx=0;closing=false;blessed=false;
+    blessOn=true;   // ← 確認用。毎回出る。戻す時は (Math.random()<0.2) に
+    paintStep();show('session');lockScreen(true);
   }
 
   function finish(){
-    if(timerId){clearInterval(timerId);timerId=null}
-    lockScreen(false);setProgress(1);
+    document.body.classList.remove('blessing');
+    lockScreen(false);endLight();
     var k=todayKey();
     if(days.indexOf(k)<0){days.push(k);store.set(KEY,JSON.stringify(days))}
     var hh=new Date().getHours();
-    var slot=(hh>=4&&hh<11)?'m':(hh>=11&&hh<18)?'d':'n';
+    var slot=(hh>=5&&hh<11)?'m':(hh>=11&&hh<18)?'d':'n';
     if(!slots[k])slots[k]={};
     slots[k][slot]=1;
     store.set(KEY2,JSON.stringify(slots));
@@ -572,9 +648,10 @@ body.t-night #surface,body.t-night #sparkle{opacity:0}
     $('doneStamp').textContent=MON[d.getMonth()]+' '+d.getDate()+' . '+
       ('0'+d.getHours()).slice(-2)+':'+('0'+d.getMinutes()).slice(-2);
 
+    $('blessLine').style.display = blessed ? '' : 'none';
     show('done');
     bubbleBurst();
-    $('done').querySelectorAll('.fin-big,.fin-rules,.stamp,.actions').forEach(function(el){
+    $('done').querySelectorAll('.fin-big,.fin-rules,.blessline,.stamp,.actions').forEach(function(el){
       el.style.animation='none';void el.offsetWidth;el.style.animation='';
     });
   }
@@ -592,6 +669,17 @@ body.t-night #surface,body.t-night #sparkle{opacity:0}
     });
   }
 
+  // 光の量は経過時間ではなく、どこまで唱えたかで決める
+  // 朝と昼は水面へ浮かび、夜は深く沈んでいく
+  var LIGHT_UP  =[0.16,0.40,0.64,0.84,0.94];
+  var LIGHT_DOWN=[0.88,0.68,0.48,0.28,0.12];
+  function isNight(){ return document.body.classList.contains('t-night'); }
+  function lightByStep(){
+    var n = blessed ? 4 : (closing ? 3 : Math.min(idx,2));
+    setProgress((isNight()?LIGHT_DOWN:LIGHT_UP)[n]);
+  }
+  function endLight(){ setProgress(isNight()?0.04:1); }
+
   function updateDots(active){
     var lists=document.querySelectorAll('.dots');
     for(var j=0;j<lists.length;j++){
@@ -603,13 +691,18 @@ body.t-night #surface,body.t-night #sparkle{opacity:0}
   function advance(){
     if(screens.standby.classList.contains('on')){startSession();return}
     if(screens.session.classList.contains('on')){
-      if(closing){finish();return}
+      if(blessed){finish();return}
+      if(closing){
+        if(blessOn){closing=false;blessed=true;paintStep();bubblePuff();return}
+        finish();return;
+      }
       idx++; if(idx>=ROUNDS.length)closing=true;
-      paintStep(); bubblePuff(idx-1);
+      paintStep(); bubblePuff();
     }
   }
   function goBack(){
     if(!screens.session.classList.contains('on'))return;
+    if(blessed){blessed=false;closing=true;paintStep();return}
     if(closing){closing=false;idx=ROUNDS.length-1;paintStep();return}
     if(idx>0){idx--;paintStep()}
   }
@@ -651,12 +744,15 @@ body.t-night #surface,body.t-night #sparkle{opacity:0}
     if(touched)return; onEnd(e.clientX,e.clientY);
   });
   $('blankBtn').addEventListener('click',function(){
-    var u=$('utterance');u.textContent=BLANK;u.classList.remove('empty');
+    var u=$('utterance');
+    u.textContent = blessed ? '今日は 名前が浮かばんな' : BLANK;
+    u.classList.remove('empty');
   });
   function applyDepth(){
     var h=new Date().getHours();
-    var cls = (h>=4&&h<11) ? 't-morning' : (h>=11&&h<18) ? 't-day' : 't-night';
-    document.body.className=cls;
+    var cls = (h>=5&&h<11) ? 't-morning' : (h>=11&&h<18) ? 't-day' : 't-night';
+    document.body.classList.remove('t-morning','t-day','t-night');
+    document.body.classList.add(cls);
   }
 
   function makeSparkle(){
@@ -712,26 +808,24 @@ body.t-night #surface,body.t-night #sparkle{opacity:0}
     box.appendChild(frag);
   }
 
-  // 段ごとに湧き方を変える：奥まった一筋 → 中央でふくらむ → 大きく開く
-  var PUFF=[
-    {n:10, x:34, sp:4, s0:3, s1:8,  d0:7.0, d1:2.2, dx:14, lag:1.4},
-    {n:16, x:52, sp:6, s0:3, s1:13, d0:7.8, d1:2.4, dx:24, lag:2.0},
-    {n:24, x:64, sp:9, s0:4, s1:19, d0:8.6, d1:2.6, dx:36, lag:2.6}
-  ];
-
-  function bubblePuff(step){
+  function bubblePuff(){
     var box=$('burst'); if(!box)return;
-    var c=PUFF[Math.max(0,Math.min(2,step))];
-    for(var i=0;i<c.n;i++){
+    var n  = 8+Math.floor(Math.random()*13);      // 8〜20個
+    var cx = 22+Math.random()*56;                 // 湧く位置もその都度
+    var sp = 3+Math.random()*8;
+    var big= 8+Math.random()*12;
+    var dxr= 14+Math.random()*26;
+    var lag= 1.0+Math.random()*1.8;
+    for(var i=0;i<n;i++){
       var el=document.createElement('i'), inner=document.createElement('b');
       el.className='once';
       var u=Math.random()*2-1;
-      var sz=c.s0+Math.pow(Math.random(),2.2)*(c.s1-c.s0);
-      el.style.left=(c.x+u*c.sp)+'%';
+      var sz=3+Math.pow(Math.random(),2.2)*big;
+      el.style.left=(cx+u*sp)+'%';
       el.style.width=sz+'px'; el.style.height=sz+'px';
-      el.style.setProperty('--dx',(u*c.dx)+'vw');
-      el.style.animationDuration=(c.d0+Math.random()*c.d1)+'s';
-      el.style.animationDelay=(Math.random()*c.lag)+'s';
+      el.style.setProperty('--dx',(u*dxr)+'vw');
+      el.style.animationDuration=(6.4+Math.random()*3.4)+'s';
+      el.style.animationDelay=(Math.random()*lag)+'s';
       inner.style.animationDuration=(3.2+Math.random()*2.2)+'s';
       inner.style.animationDelay=(-Math.random()*4)+'s';
       var fine=document.createElement('u');
@@ -788,6 +882,7 @@ body.t-night #surface,body.t-night #sparkle{opacity:0}
   }
 
   $('backBtn').addEventListener('click',function(){
+    chime();
     var box=$('burst'); if(box)box.innerHTML='';
     setProgress(0);renderStandby();show('standby');
   });
