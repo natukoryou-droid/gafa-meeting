@@ -359,7 +359,7 @@ body.blessing .guide{font-size:1.14rem;letter-spacing:.06em}
   text-shadow:0 0 14px rgba(236,206,150,.26),0 0 34px rgba(220,180,110,.14)}
 #done .stamp{font-family:var(--lat);font-size:1.02rem;letter-spacing:.28em;color:var(--brass);
   margin-top:28px;opacity:0;animation:fadeUp 1.3s ease 3.0s forwards}
-#done .actions{margin-top:48px;opacity:0;animation:fadeUp 1.3s ease 3.6s forwards}
+#done .actions{margin-top:48px;opacity:0;animation:fadeUp .9s ease .25s forwards}
 @keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 @keyframes finIn{
   0%{opacity:0;transform:translateY(30px) scale(.94);
@@ -437,7 +437,7 @@ body.blessing .guide{font-size:1.14rem;letter-spacing:.06em}
     <div>
       <div class="dots"><span></span><span></span><span></span><span></span><span></span></div>
       <div class="btn-wrap"><button class="btn" id="nextBtn"><span class="script">Next</span></button></div>
-      <button class="link" id="blankBtn"><span>何も浮かばない時</span></button>
+      <button class="link" id="blankBtn"><span id="blankLabel">何も浮かばない時</span></button>
     </div>
   </section>
 
@@ -473,6 +473,15 @@ body.blessing .guide{font-size:1.14rem;letter-spacing:.06em}
     }
   };
   var KEY='manayui:days', days=[];
+
+  /* ── ティンシャを鳴らす条件 ──────────────────────
+     ここの数字を変えるだけで調整できます
+       CHIME_NIGHT_FROM : この時刻以降は必ず鳴る（20 = 20時）
+       CHIME_FIRST_BEFORE : この時刻より前の「その日の一回目」に鳴る
+  ───────────────────────────────────── */
+  var CHIME_NIGHT_FROM   = 20;
+  var CHIME_FIRST_BEFORE = 11;
+  var KEY3='manayui:chimed', chimedDay='';   // 朝に鳴らした日付を覚えておく
   var KEY2='manayui:slots', slots={};
 
   var MANTRA='<span>受けいれ</span><span>認め</span><span>ゆるし</span><span>愛しています</span>';
@@ -496,7 +505,7 @@ body.blessing .guide{font-size:1.14rem;letter-spacing:.06em}
   var BLESS_MANTRA='<span>愛しています</span>';
   var blessOn=false;   // その回に祝福を出すか
   var blessed=false;   // 祝福の段に入ったか
-  var BLANK='今日は 何も浮かばんな';
+  var BLANK='今は 何も浮かばないな';
 
   var $=function(id){return document.getElementById(id)};
   var screens={standby:$('standby'),session:$('session'),done:$('done')};
@@ -541,7 +550,7 @@ body.blessing .guide{font-size:1.14rem;letter-spacing:.06em}
       $('stepNum').textContent='';
       $('ghostNum').textContent='';
       $('ghostNum').className='ghost-num';
-      $('guide').textContent='浮かんだ人の名前を、そのまま';
+      $('guide').textContent='浮かんだ人がいれば、その名前を';
       $('utterance').style.display='';
       $('utterance').textContent='';
       $('utterance').classList.add('empty');
@@ -549,6 +558,7 @@ body.blessing .guide{font-size:1.14rem;letter-spacing:.06em}
       $('mantra').innerHTML=BLESS_MANTRA;
       $('nextBtn').innerHTML='<span class="script">Next</span>';
       $('blankBtn').style.visibility='visible';
+      $('blankLabel').textContent='今は誰も浮かばない';   // 押すと Fin へ
       updateDots(4);highlight(0);replay();lightByStep();
       return;
     }
@@ -627,7 +637,18 @@ body.blessing .guide{font-size:1.14rem;letter-spacing:.06em}
     }catch(e){}
   }
 
+  var chimeToday=false;
+
   function startSession(){
+    var h=new Date().getHours();
+    if(h>=CHIME_NIGHT_FROM){
+      chimeToday=true;                      // 夜は何度でも
+    } else if(h<CHIME_FIRST_BEFORE && chimedDay!==todayKey()){
+      chimeToday=true;                      // 朝はその日の最初の一度だけ
+    } else {
+      chimeToday=false;
+    }
+
     idx=0;closing=false;blessed=false;
     blessOn=true;   // ← 確認用。毎回出る。戻す時は (Math.random()<0.2) に
     paintStep();show('session');lockScreen(true);
@@ -744,8 +765,9 @@ body.blessing .guide{font-size:1.14rem;letter-spacing:.06em}
     if(touched)return; onEnd(e.clientX,e.clientY);
   });
   $('blankBtn').addEventListener('click',function(){
+    if(blessed){ finish(); return; }   // 5枚目はそのまま Fin へ
     var u=$('utterance');
-    u.textContent = blessed ? '今日は 名前が浮かばんな' : BLANK;
+    u.textContent=BLANK;
     u.classList.remove('empty');
   });
   function applyDepth(){
@@ -882,7 +904,14 @@ body.blessing .guide{font-size:1.14rem;letter-spacing:.06em}
   }
 
   $('backBtn').addEventListener('click',function(){
-    chime();
+    if(chimeToday){
+      chime();
+      if(new Date().getHours()<CHIME_NIGHT_FROM){
+        chimedDay=todayKey();
+        store.set(KEY3,chimedDay);          // 朝に鳴らしたことを記録
+      }
+      chimeToday=false;
+    }
     var box=$('burst'); if(box)box.innerHTML='';
     setProgress(0);renderStandby();show('standby');
   });
@@ -894,6 +923,9 @@ body.blessing .guide{font-size:1.14rem;letter-spacing:.06em}
   }).then(function(v2){
     try{slots=v2?JSON.parse(v2):{}}catch(e){slots={}}
     if(!slots||typeof slots!=='object')slots={};
+    return store.get(KEY3);
+  }).then(function(v3){
+    chimedDay = v3 || '';
     applyDepth();
     makeSparkle();
     makeBubbles();
