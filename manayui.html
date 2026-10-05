@@ -275,6 +275,22 @@ body.blessing .mantra{margin-top:18px}
 .cell.today{color:var(--white)}
 .cell.today::after{content:'';position:absolute;left:50%;bottom:0;transform:translateX(-50%);
   width:5px;height:5px;border-radius:50%;background:var(--brass-lt)}
+/* 画面が低いスマホでは間隔とカレンダーを詰めて、Startボタンまで収める */
+@media (max-height:800px){
+  .hero{padding:12px 0}
+  .hero .sub{margin-top:10px}
+  .cal{margin-bottom:6px}
+  .cal-head{margin-bottom:6px}
+  .grid{gap:2px}
+  .cell{aspect-ratio:auto;height:40px}
+  .dots{padding:12px 0 8px}
+}
+@media (max-height:700px){
+  .head-rule{margin-bottom:10px}
+  .date{font-size:1.7rem}
+  .marks{margin-top:10px}
+  .cell{height:34px}
+}
 .cell.done{color:var(--brass-lt)}
 .cell.done::before{content:'';position:absolute;inset:12%;border-radius:50%;
   border:1.5px solid rgba(185,200,228,.85)}
